@@ -1,21 +1,34 @@
-<?php get_header(); ?>
+<?php
+/**
+ * Default page template
+ *
+ * @package Fieldcraft
+ */
 
-<main class="site-main">
-    <section class="page-section">
-        <div class="container">
-            <?php 
-            while (have_posts()) {
-                the_post(); 
-                ?>
-                <h1 class="page-title"><?php the_title(); ?></h1>
-                <div class="page-content">
-                    <?php the_content(); ?>
-                </div>
-                <?php 
-            }
-            ?>
+get_header();
+?>
+
+<?php while (have_posts()) : the_post(); ?>
+
+<section class="hero" style="padding-bottom: 2rem;">
+    <div class="container">
+        <div class="hero-content">
+            <h1 class="text-hero"><?php the_title(); ?></h1>
+            <?php if (has_excerpt()) : ?>
+                <p class="hero-subtitle"><?php echo get_the_excerpt(); ?></p>
+            <?php endif; ?>
         </div>
-    </section>
-</main>
+    </div>
+</section>
+
+<section class="section" style="padding-top: 2rem;">
+    <div class="container" style="max-width: 800px;">
+        <div class="prose">
+            <?php the_content(); ?>
+        </div>
+    </div>
+</section>
+
+<?php endwhile; ?>
 
 <?php get_footer(); ?>

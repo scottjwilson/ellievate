@@ -9,44 +9,63 @@
 <body <?php body_class(); ?>>
 <?php wp_body_open(); ?>
 
-<header class="site-header">
+<?php
+// Determine header variant based on template
+$header_class = "site-header";
+$use_light_header =
+    is_front_page() || is_page_template(["about.php", "services.php"]);
+if ($use_light_header) {
+    $header_class .= " header-light";
+}
+?>
+
+<header class="<?php echo esc_attr($header_class); ?>">
     <div class="container">
         <div class="header-inner">
             <!-- Logo -->
             <a href="<?php echo esc_url(home_url("/")); ?>" class="site-logo">
-                <?php if (has_custom_logo()): ?>
-                    <?php the_custom_logo(); ?>
-                <?php else: ?>
-                    <span class="logo-icon">
-                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                            <circle cx="8" cy="8" r="6" fill="currentColor"/>
-                        </svg>
-                    </span>
-                    <?php bloginfo("name"); ?>
-                <?php endif; ?>
+                <span class="logo-mark">F</span>
+                <span>Fieldcraft</span>
             </a>
 
             <!-- Desktop Navigation -->
             <nav class="nav-desktop">
-                <?php wp_nav_menu([
-                    "theme_location" => "primary",
-                    "container" => false,
-                    "menu_class" => "nav-menu",
-                    "fallback_cb" => false,
-                    "depth" => 2,
-                ]); ?>
+                <ul class="nav-menu">
+                    <li><a href="<?php echo esc_url(
+                        home_url("/"),
+                    ); ?>" class="nav-link<?php echo is_front_page()
+    ? " is-active"
+    : ""; ?>">Home</a></li>
+                    <li><a href="<?php echo esc_url(
+                        home_url("/services"),
+                    ); ?>" class="nav-link">Services</a></li>
+                    <li><a href="<?php echo esc_url(
+                        home_url("/work"),
+                    ); ?>" class="nav-link">Work</a></li>
+                    <li><a href="<?php echo esc_url(
+                        home_url("/about"),
+                    ); ?>" class="nav-link">About</a></li>
+                    <li><a href="<?php echo esc_url(
+                        home_url("/blog"),
+                    ); ?>" class="nav-link">Blog</a></li>
+                </ul>
+                <div class="nav-actions">
+                    <a href="<?php echo esc_url(
+                        home_url("/contact"),
+                    ); ?>" class="btn btn-accent">
+                        Get in Touch
+                        <?php echo fieldcraft_icon("arrow-right"); ?>
+                    </a>
+                </div>
             </nav>
 
             <!-- Mobile Menu Toggle -->
-            <button class="menu-toggle" aria-expanded="false" aria-label="<?php esc_attr_e(
-                "Toggle menu",
-                "clean-vite-wp",
-            ); ?>">
-                <span class="icon-menu"><?php echo clean_vite_wp_icon(
+            <button class="menu-toggle" aria-expanded="false" aria-label="Toggle menu">
+                <span class="icon-menu"><?php echo fieldcraft_icon(
                     "menu",
                     24,
                 ); ?></span>
-                <span class="icon-close"><?php echo clean_vite_wp_icon(
+                <span class="icon-close"><?php echo fieldcraft_icon(
                     "close",
                     24,
                 ); ?></span>
@@ -55,14 +74,30 @@
     </div>
 
     <!-- Mobile Navigation -->
-    <nav class="nav-mobile">
-        <?php wp_nav_menu([
-            "theme_location" => "primary",
-            "container" => false,
-            "menu_class" => "nav-menu-mobile",
-            "fallback_cb" => false,
-            "depth" => 1,
-        ]); ?>
+    <nav class="nav-mobile" aria-hidden="true">
+        <a href="<?php echo esc_url(
+            home_url("/"),
+        ); ?>" class="nav-link">Home</a>
+        <a href="<?php echo esc_url(
+            home_url("/services"),
+        ); ?>" class="nav-link">Services</a>
+        <a href="<?php echo esc_url(
+            home_url("/work"),
+        ); ?>" class="nav-link">Work</a>
+        <a href="<?php echo esc_url(
+            home_url("/about"),
+        ); ?>" class="nav-link">About</a>
+        <a href="<?php echo esc_url(
+            home_url("/blog"),
+        ); ?>" class="nav-link">Blog</a>
+        <div class="nav-mobile-actions">
+            <a href="<?php echo esc_url(
+                home_url("/contact"),
+            ); ?>" class="btn btn-accent">
+                Get in Touch
+                <?php echo fieldcraft_icon("arrow-right"); ?>
+            </a>
+        </div>
     </nav>
 </header>
 

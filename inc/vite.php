@@ -1,6 +1,6 @@
 <?php
 /**
- * Vite Integration
+ * Vite Integration for Fieldcraft Digital 2.0
  *
  * Handles Vite dev server detection and asset loading for both
  * development (HMR) and production (manifest-based) environments.
@@ -11,7 +11,7 @@
  *
  * @return array{running: bool, base: string, server: string}
  */
-function clean_vite_wp_detect_vite_server(): array
+function fieldcraft_detect_vite_server(): array
 {
     $vite_server = "http://localhost:3000";
 
@@ -44,7 +44,7 @@ function clean_vite_wp_detect_vite_server(): array
 
     // Try with theme base path
     $client_response = @wp_remote_get(
-        $vite_server . "/wp-content/themes/clean-vite-wp/@vite/client",
+        $vite_server . "/wp-content/themes/fieldcraftdigital2/@vite/client",
         [
             "timeout" => 1,
             "sslverify" => false,
@@ -58,7 +58,7 @@ function clean_vite_wp_detect_vite_server(): array
     ) {
         return [
             "running" => true,
-            "base" => "/wp-content/themes/clean-vite-wp/",
+            "base" => "/wp-content/themes/fieldcraftdigital2/",
             "server" => $vite_server,
         ];
     }
@@ -71,7 +71,7 @@ function clean_vite_wp_detect_vite_server(): array
  *
  * @return bool
  */
-function clean_vite_wp_is_local_environment(): bool
+function fieldcraft_is_local_environment(): bool
 {
     $home_url = home_url();
     return strpos($home_url, "localhost") !== false ||
@@ -83,11 +83,11 @@ function clean_vite_wp_is_local_environment(): bool
 /**
  * Output Vite client scripts in head for HMR
  */
-function clean_vite_wp_output_vite_scripts(): void
+function fieldcraft_output_vite_scripts(): void
 {
-    $vite = clean_vite_wp_detect_vite_server();
+    $vite = fieldcraft_detect_vite_server();
 
-    if (!$vite["running"] && !clean_vite_wp_is_local_environment()) {
+    if (!$vite["running"] && !fieldcraft_is_local_environment()) {
         return;
     }
 
@@ -104,14 +104,14 @@ function clean_vite_wp_output_vite_scripts(): void
         '"></script>' .
         "\n";
 }
-add_action("wp_head", "clean_vite_wp_output_vite_scripts", 1);
+add_action("wp_head", "fieldcraft_output_vite_scripts", 1);
 
 /**
  * Load Vite assets from manifest in production
  */
-function clean_vite_wp_load_vite_production_assets(): void
+function fieldcraft_load_vite_production_assets(): void
 {
-    $vite = clean_vite_wp_detect_vite_server();
+    $vite = fieldcraft_detect_vite_server();
 
     if ($vite["running"]) {
         return;
@@ -136,7 +136,7 @@ function clean_vite_wp_load_vite_production_assets(): void
         foreach ($entry["css"] as $index => $css_file) {
             $css_path = get_theme_file_path("dist/" . $css_file);
             wp_enqueue_style(
-                "vite-style-" . $index,
+                "fieldcraft-vite-style-" . $index,
                 get_theme_file_uri("dist/" . $css_file),
                 [],
                 file_exists($css_path) ? filemtime($css_path) : null,
@@ -147,18 +147,14 @@ function clean_vite_wp_load_vite_production_assets(): void
     // Enqueue JS
     $js_path = get_theme_file_path("dist/" . $entry["file"]);
     wp_enqueue_script(
-        "vite-main",
+        "fieldcraft-vite-main",
         get_theme_file_uri("dist/" . $entry["file"]),
         [],
         file_exists($js_path) ? filemtime($js_path) : null,
         true,
     );
 }
-add_action(
-    "wp_enqueue_scripts",
-    "clean_vite_wp_load_vite_production_assets",
-    100,
-);
+add_action("wp_enqueue_scripts", "fieldcraft_load_vite_production_assets", 100);
 
 /**
  * Add type="module" attribute to Vite scripts
@@ -168,12 +164,12 @@ add_action(
  * @param string $src    Script source URL
  * @return string Modified script tag
  */
-function clean_vite_wp_vite_script_module_type(
+function fieldcraft_vite_script_module_type(
     string $tag,
     string $handle,
     string $src,
 ): string {
-    if (strpos($handle, "vite-") !== 0) {
+    if (strpos($handle, "fieldcraft-vite-") !== 0) {
         return $tag;
     }
 
@@ -186,4 +182,4 @@ function clean_vite_wp_vite_script_module_type(
 
     return str_replace("<script ", '<script type="module" ', $tag);
 }
-add_filter("script_loader_tag", "clean_vite_wp_vite_script_module_type", 10, 3);
+add_filter("script_loader_tag", "fieldcraft_vite_script_module_type", 10, 3);

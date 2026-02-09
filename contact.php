@@ -2,9 +2,9 @@
 /**
  * Template Name: Contact Page
  *
- * Contact page template for Fieldcraft Digital.
+ * Contact / Booking page for Ellievated Beauty.
  *
- * @package Fieldcraft
+ * @package Ellievated
  */
 
 get_header(); ?>
@@ -14,43 +14,38 @@ get_header(); ?>
 .contact-hero {
     position: relative;
     padding: 10rem 0 6rem;
-    background: linear-gradient(135deg, var(--color-dark-950) 0%, var(--color-primary-950) 100%);
-    color: white;
-    overflow: hidden;
-}
-
-.contact-hero::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 50%;
-    height: 100%;
-    background: radial-gradient(ellipse at 80% 50%, rgba(139, 92, 246, 0.2) 0%, transparent 60%);
-    pointer-events: none;
+    background: var(--color-cream-100);
+    text-align: center;
 }
 
 .contact-hero-content {
-    position: relative;
-    z-index: 1;
     max-width: 600px;
+    margin: 0 auto;
 }
 
 .contact-hero .text-label {
-    color: var(--color-accent-400);
+    color: var(--color-primary-600);
     margin-bottom: var(--space-4);
     display: block;
 }
 
 .contact-hero h1 {
+    font-family: var(--font-display);
     font-size: var(--text-hero);
-    color: white;
+    font-weight: 400;
+    color: var(--color-dark-900);
     margin-bottom: var(--space-6);
 }
 
+.contact-hero h1 em {
+    font-style: italic;
+    font-weight: 500;
+}
+
 .contact-hero-text {
-    font-size: var(--text-xl);
-    color: var(--color-dark-300);
+    font-size: var(--text-lg);
+    font-weight: 300;
+    color: var(--color-neutral-500);
     line-height: var(--leading-relaxed);
 }
 
@@ -74,12 +69,15 @@ get_header(); ?>
 
 /* Contact Info */
 .contact-info h2 {
+    font-family: var(--font-display);
     font-size: var(--text-3xl);
+    font-weight: 500;
     margin-bottom: var(--space-4);
 }
 
 .contact-info > p {
-    color: var(--color-neutral-600);
+    font-weight: 300;
+    color: var(--color-neutral-500);
     line-height: var(--leading-relaxed);
     margin-bottom: var(--space-8);
 }
@@ -103,20 +101,22 @@ get_header(); ?>
     display: flex;
     align-items: center;
     justify-content: center;
-    background: var(--color-primary-100);
-    border-radius: var(--radius-xl);
-    color: var(--color-primary-600);
+    background: var(--color-cream-200);
+    color: var(--color-primary-700);
     flex-shrink: 0;
 }
 
 .contact-method h4 {
+    font-family: var(--font-display);
     font-size: var(--text-base);
+    font-weight: 500;
     margin-bottom: var(--space-1);
 }
 
 .contact-method p {
     font-size: var(--text-sm);
-    color: var(--color-neutral-600);
+    font-weight: 300;
+    color: var(--color-neutral-500);
 }
 
 .contact-method a {
@@ -135,10 +135,12 @@ get_header(); ?>
 }
 
 .contact-social h4 {
-    font-size: var(--text-sm);
+    font-family: var(--font-body);
+    font-size: var(--text-xs);
+    font-weight: 500;
     text-transform: uppercase;
-    letter-spacing: var(--tracking-wider);
-    color: var(--color-neutral-500);
+    letter-spacing: var(--tracking-widest);
+    color: var(--color-neutral-400);
     margin-bottom: var(--space-4);
 }
 
@@ -153,8 +155,7 @@ get_header(); ?>
     display: flex;
     align-items: center;
     justify-content: center;
-    background: var(--color-neutral-100);
-    border-radius: var(--radius-lg);
+    background: var(--color-cream-100);
     color: var(--color-neutral-600);
     transition: all var(--transition-base);
 }
@@ -162,14 +163,12 @@ get_header(); ?>
 .social-links a:hover {
     background: var(--color-primary-600);
     color: white;
-    transform: translateY(-2px);
 }
 
 /* Contact Form */
 .contact-form-wrapper {
-    background: var(--color-neutral-50);
+    background: var(--color-cream-50);
     padding: var(--space-10);
-    border-radius: var(--radius-3xl);
 }
 
 .contact-form {
@@ -196,8 +195,10 @@ get_header(); ?>
 }
 
 .form-group label {
-    font-size: var(--text-sm);
+    font-size: var(--text-xs);
     font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-wider);
     color: var(--color-dark-800);
 }
 
@@ -207,8 +208,8 @@ get_header(); ?>
     padding: var(--space-4);
     background: white;
     border: 1px solid var(--color-neutral-200);
-    border-radius: var(--radius-lg);
     font-size: var(--text-base);
+    font-weight: 300;
     transition: all var(--transition-fast);
 }
 
@@ -227,7 +228,7 @@ get_header(); ?>
 
 .form-group textarea {
     resize: vertical;
-    min-height: 150px;
+    min-height: 120px;
 }
 
 .form-group.full-width {
@@ -241,7 +242,7 @@ get_header(); ?>
 /* FAQ Section */
 .contact-faq {
     padding: var(--section-padding) 0;
-    background: var(--color-neutral-50);
+    background: var(--color-cream-50);
 }
 
 .faq-list {
@@ -255,7 +256,6 @@ get_header(); ?>
 .faq-item {
     background: white;
     border: 1px solid var(--color-neutral-200);
-    border-radius: var(--radius-xl);
     overflow: hidden;
 }
 
@@ -267,8 +267,8 @@ get_header(); ?>
     gap: var(--space-4);
     padding: var(--space-5) var(--space-6);
     font-family: var(--font-display);
-    font-size: var(--text-base);
-    font-weight: 600;
+    font-size: var(--text-lg);
+    font-weight: 500;
     color: var(--color-dark-900);
     text-align: left;
     background: none;
@@ -278,7 +278,7 @@ get_header(); ?>
 }
 
 .faq-question:hover {
-    background: var(--color-neutral-50);
+    background: var(--color-cream-50);
 }
 
 .faq-icon {
@@ -287,58 +287,27 @@ get_header(); ?>
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: var(--radius-full);
-    border: 1.5px solid var(--color-neutral-300);
     color: var(--color-neutral-500);
     flex-shrink: 0;
     transition: all var(--transition-base);
 }
 
 .faq-item.is-open .faq-icon {
-    background: var(--color-primary-600);
-    border-color: var(--color-primary-600);
-    color: white;
     transform: rotate(45deg);
+    color: var(--color-primary-600);
 }
 
 .faq-answer {
     display: none;
     padding: 0 var(--space-6) var(--space-5);
     font-size: var(--text-sm);
-    color: var(--color-neutral-600);
+    font-weight: 300;
+    color: var(--color-neutral-500);
     line-height: var(--leading-relaxed);
 }
 
 .faq-item.is-open .faq-answer {
     display: block;
-}
-
-/* Map Section (placeholder) */
-.map-section {
-    height: 400px;
-    background: var(--color-neutral-200);
-    position: relative;
-}
-
-.map-placeholder {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    background: linear-gradient(135deg, var(--color-dark-800) 0%, var(--color-dark-900) 100%);
-    color: white;
-}
-
-.map-placeholder svg {
-    margin-bottom: var(--space-4);
-    color: var(--color-primary-400);
-}
-
-.map-placeholder p {
-    font-size: var(--text-lg);
-    color: var(--color-dark-300);
 }
 </style>
 
@@ -346,10 +315,10 @@ get_header(); ?>
 <section class="contact-hero">
     <div class="container">
         <div class="contact-hero-content reveal">
-            <span class="text-label">Get in Touch</span>
-            <h1>Let's build something great together</h1>
+            <span class="text-label">Book Now</span>
+            <h1>Let's get you <em>glowing</em></h1>
             <p class="contact-hero-text">
-                Have a project in mind? We'd love to hear about it. Send us a message and we'll get back to you within 24 hours.
+                Ready for your appointment? Reach out to book a service or ask any questions about our treatments.
             </p>
         </div>
     </div>
@@ -363,37 +332,47 @@ get_header(); ?>
             <div class="contact-info reveal">
                 <h2>Contact Information</h2>
                 <p>
-                    Whether you have a question about our services, want to discuss a project, or just want to say hello—we're here to help.
+                    Have a question about our services or want to book an appointment? We'd love to hear from you.
                 </p>
 
                 <div class="contact-methods">
                     <div class="contact-method">
                         <div class="contact-method-icon">
-                            <?php echo fieldcraft_icon("mail", 22); ?>
+                            <?php echo ellievated_icon("mail", 22); ?>
                         </div>
                         <div>
-                            <h4>Email Us</h4>
-                            <p><a href="mailto:hello@fieldcraft.digital">hello@fieldcraft.digital</a></p>
+                            <h4>Email</h4>
+                            <p><a href="mailto:hello@ellievatedbeauty.com">hello@ellievatedbeauty.com</a></p>
                         </div>
                     </div>
 
                     <div class="contact-method">
                         <div class="contact-method-icon">
-                            <?php echo fieldcraft_icon("phone", 22); ?>
+                            <?php echo ellievated_icon("phone", 22); ?>
                         </div>
                         <div>
-                            <h4>Call Us</h4>
+                            <h4>Phone</h4>
                             <p><a href="tel:+1234567890">(123) 456-7890</a></p>
                         </div>
                     </div>
 
                     <div class="contact-method">
                         <div class="contact-method-icon">
-                            <?php echo fieldcraft_icon("map-pin", 22); ?>
+                            <?php echo ellievated_icon("map-pin", 22); ?>
                         </div>
                         <div>
-                            <h4>Visit Us</h4>
-                            <p>123 Design Street<br>San Francisco, CA 94102</p>
+                            <h4>Location</h4>
+                            <p>Your City, State</p>
+                        </div>
+                    </div>
+
+                    <div class="contact-method">
+                        <div class="contact-method-icon">
+                            <?php echo ellievated_icon("clock", 22); ?>
+                        </div>
+                        <div>
+                            <h4>Hours</h4>
+                            <p>By appointment only</p>
                         </div>
                     </div>
                 </div>
@@ -401,17 +380,14 @@ get_header(); ?>
                 <div class="contact-social">
                     <h4>Follow Us</h4>
                     <div class="social-links">
-                        <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" aria-label="Twitter">
-                            <?php echo fieldcraft_icon("twitter", 18); ?>
-                        </a>
-                        <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
-                            <?php echo fieldcraft_icon("linkedin", 18); ?>
-                        </a>
                         <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
-                            <?php echo fieldcraft_icon("instagram", 18); ?>
+                            <?php echo ellievated_icon("instagram", 18); ?>
                         </a>
-                        <a href="https://dribbble.com" target="_blank" rel="noopener noreferrer" aria-label="Dribbble">
-                            <?php echo fieldcraft_icon("dribbble", 18); ?>
+                        <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+                            <?php echo ellievated_icon("facebook", 18); ?>
+                        </a>
+                        <a href="https://tiktok.com" target="_blank" rel="noopener noreferrer" aria-label="TikTok">
+                            <?php echo ellievated_icon("tiktok", 18); ?>
                         </a>
                     </div>
                 </div>
@@ -423,56 +399,45 @@ get_header(); ?>
                     <div class="form-row">
                         <div class="form-group">
                             <label for="first-name">First Name *</label>
-                            <input type="text" id="first-name" name="first_name" placeholder="John" required>
+                            <input type="text" id="first-name" name="first_name" placeholder="Your first name" required>
                         </div>
                         <div class="form-group">
                             <label for="last-name">Last Name *</label>
-                            <input type="text" id="last-name" name="last_name" placeholder="Doe" required>
+                            <input type="text" id="last-name" name="last_name" placeholder="Your last name" required>
                         </div>
                     </div>
 
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="email">Email Address *</label>
-                            <input type="email" id="email" name="email" placeholder="john@company.com" required>
+                            <label for="email">Email *</label>
+                            <input type="email" id="email" name="email" placeholder="your@email.com" required>
                         </div>
                         <div class="form-group">
-                            <label for="phone">Phone Number</label>
+                            <label for="phone">Phone</label>
                             <input type="tel" id="phone" name="phone" placeholder="(123) 456-7890">
                         </div>
                     </div>
 
                     <div class="form-group full-width">
-                        <label for="service">What can we help you with?</label>
+                        <label for="service">Service Interested In</label>
                         <select id="service" name="service">
                             <option value="">Select a service...</option>
-                            <option value="web-design">Web Design</option>
-                            <option value="development">Development</option>
-                            <option value="seo">SEO Strategy</option>
-                            <option value="marketing">Digital Marketing</option>
-                            <option value="branding">Brand Identity</option>
-                            <option value="other">Other</option>
+                            <option value="signature-facial">Signature Facial</option>
+                            <option value="brow-wax">Brow Wax</option>
+                            <option value="brazilian-wax">Brazilian Wax</option>
+                            <option value="other">Other / General Question</option>
                         </select>
                     </div>
 
                     <div class="form-group full-width">
-                        <label for="budget">Estimated Budget</label>
-                        <select id="budget" name="budget">
-                            <option value="">Select budget range...</option>
-                            <option value="5k-10k">$5,000 - $10,000</option>
-                            <option value="10k-25k">$10,000 - $25,000</option>
-                            <option value="25k-50k">$25,000 - $50,000</option>
-                            <option value="50k+">$50,000+</option>
-                        </select>
+                        <label for="message">Message</label>
+                        <textarea id="message" name="message" placeholder="Tell us about what you're looking for, any skin concerns, or preferred appointment times..."></textarea>
                     </div>
 
-                    <div class="form-group full-width">
-                        <label for="message">Tell us about your project *</label>
-                        <textarea id="message" name="message" placeholder="Describe your project, goals, and timeline..." required></textarea>
-                    </div>
-
-                    <button type="submit" class="btn btn-accent btn-lg">
-                        Send Message <?php echo fieldcraft_icon("arrow-right"); ?>
+                    <button type="submit" class="btn btn-outline btn-lg">
+                        Send Message <?php echo ellievated_icon(
+                            "arrow-right",
+                        ); ?>
                     </button>
                 </form>
             </div>
@@ -491,52 +456,56 @@ get_header(); ?>
         <div class="faq-list">
             <div class="faq-item is-open reveal">
                 <button class="faq-question">
-                    <span>How long does a typical project take?</span>
-                    <span class="faq-icon"><?php echo fieldcraft_icon("plus", 14); ?></span>
+                    <span>How do I prepare for my facial appointment?</span>
+                    <span class="faq-icon"><?php echo ellievated_icon(
+                        "plus",
+                        14,
+                    ); ?></span>
                 </button>
                 <div class="faq-answer">
-                    Project timelines vary based on scope and complexity. A simple website typically takes 4-6 weeks, while larger projects can take 3-6 months. We'll provide a detailed timeline during our initial consultation.
+                    Come with a clean face free of makeup if possible. Avoid retinols or exfoliating products 48 hours before your appointment. Let us know about any skin sensitivities or allergies during your consultation.
                 </div>
             </div>
 
             <div class="faq-item reveal reveal-delay-1">
                 <button class="faq-question">
-                    <span>What is your pricing structure?</span>
-                    <span class="faq-icon"><?php echo fieldcraft_icon("plus", 14); ?></span>
+                    <span>How long does each service take?</span>
+                    <span class="faq-icon"><?php echo ellievated_icon(
+                        "plus",
+                        14,
+                    ); ?></span>
                 </button>
                 <div class="faq-answer">
-                    We offer both project-based pricing and retainer arrangements. Every project is unique, so we provide custom quotes based on your specific requirements. We're always transparent about costs upfront.
+                    A Signature Facial typically takes 60-75 minutes. A Brow Wax takes about 15-20 minutes. A Brazilian Wax takes approximately 30-45 minutes. Times may vary based on individual needs.
                 </div>
             </div>
 
             <div class="faq-item reveal reveal-delay-2">
                 <button class="faq-question">
-                    <span>Do you work with clients remotely?</span>
-                    <span class="faq-icon"><?php echo fieldcraft_icon("plus", 14); ?></span>
+                    <span>What is your cancellation policy?</span>
+                    <span class="faq-icon"><?php echo ellievated_icon(
+                        "plus",
+                        14,
+                    ); ?></span>
                 </button>
                 <div class="faq-answer">
-                    Absolutely! We work with clients worldwide. We use modern collaboration tools like Slack, Zoom, and Figma to ensure seamless communication regardless of location.
+                    We ask for at least 24 hours notice for cancellations or rescheduling. Late cancellations or no-shows may be subject to a cancellation fee.
                 </div>
             </div>
 
             <div class="faq-item reveal reveal-delay-3">
                 <button class="faq-question">
-                    <span>What happens after the project is complete?</span>
-                    <span class="faq-icon"><?php echo fieldcraft_icon("plus", 14); ?></span>
+                    <span>Is waxing painful?</span>
+                    <span class="faq-icon"><?php echo ellievated_icon(
+                        "plus",
+                        14,
+                    ); ?></span>
                 </button>
                 <div class="faq-answer">
-                    We provide post-launch support to ensure everything runs smoothly. We also offer ongoing maintenance packages for clients who need regular updates and support.
+                    We use premium hard wax and gentle techniques to minimize discomfort. Most clients find the process much more comfortable than expected, especially with regular appointments. We also provide pre and post-wax care to soothe the skin.
                 </div>
             </div>
         </div>
-    </div>
-</section>
-
-<!-- Map Section -->
-<section class="map-section">
-    <div class="map-placeholder">
-        <?php echo fieldcraft_icon("map-pin", 48); ?>
-        <p>San Francisco, California</p>
     </div>
 </section>
 

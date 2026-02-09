@@ -2,34 +2,29 @@
 /**
  * 404 Error Page
  *
- * @package Clean_Vite_WP
+ * @package Ellievated
  */
 
 get_header(); ?>
 
-<section class="hero" style="min-height: 70vh; display: flex; align-items: center;">
-    <div class="container">
-        <div class="hero-content">
-            <p style="font-family: var(--font-display); font-size: 8rem; font-weight: 700; color: var(--color-neutral-200); line-height: 1; margin-bottom: 1rem;">404</p>
-            <h1 class="text-display"><?php esc_html_e(
-                "Page Not Found",
-                "clean-vite-wp",
-            ); ?></h1>
-            <p class="hero-subtitle"><?php esc_html_e(
+<section style="min-height: 70vh; display: flex; align-items: center; background: var(--color-cream-100);">
+    <div class="container" style="text-align: center;">
+        <p style="font-family: var(--font-display); font-size: 8rem; font-weight: 400; color: var(--color-neutral-200); line-height: 1; margin-bottom: 1rem;">404</p>
+        <h1 style="font-family: var(--font-display); font-size: var(--text-5xl); font-weight: 400;"><?php esc_html_e(
+            "Page Not Found",
+            "ellievated",
+        ); ?></h1>
+        <p style="font-size: var(--text-lg); font-weight: 300; color: var(--color-neutral-500); margin: var(--space-4) auto var(--space-8); max-width: 400px;">
+            <?php esc_html_e(
                 "The page you're looking for doesn't exist or has been moved.",
-                "clean-vite-wp",
-            ); ?></p>
-            <div class="hero-actions">
-                <a href="<?php echo esc_url(
-                    home_url("/"),
-                ); ?>" class="btn btn-primary btn-lg">
-                    <?php esc_html_e(
-                        "Back to Home",
-                        "clean-vite-wp",
-                    ); ?> <?php echo clean_vite_wp_icon("arrow-right"); ?>
-                </a>
-            </div>
-        </div>
+                "ellievated",
+            ); ?>
+        </p>
+        <a href="<?php echo esc_url(
+            home_url("/"),
+        ); ?>" class="btn btn-outline btn-lg">
+            <?php esc_html_e("Back to Home", "ellievated"); ?>
+        </a>
     </div>
 </section>
 

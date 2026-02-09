@@ -1,5 +1,5 @@
 /**
- * Fieldcraft Digital 2.0
+ * Ellievated Beauty
  * Main JavaScript
  */
 
@@ -59,8 +59,6 @@
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
           entry.target.classList.add("is-visible");
-          // Optionally unobserve after revealing
-          // revealObserver.unobserve(entry.target);
         }
       });
     }, observerOptions);
@@ -122,55 +120,9 @@
             behavior: "smooth",
           });
 
-          // Close mobile menu if open
           closeMobileMenu();
         }
       });
-    });
-  }
-
-  // ========================================
-  // COUNTER ANIMATION
-  // ========================================
-  function animateCounter(element, target, duration = 2000) {
-    const start = 0;
-    const increment = target / (duration / 16);
-    let current = start;
-
-    const timer = setInterval(() => {
-      current += increment;
-      if (current >= target) {
-        element.textContent = target;
-        clearInterval(timer);
-      } else {
-        element.textContent = Math.floor(current);
-      }
-    }, 16);
-  }
-
-  function initCounterAnimations() {
-    const counters = document.querySelectorAll("[data-counter]");
-
-    if (!counters.length) return;
-
-    const observerOptions = {
-      root: null,
-      rootMargin: "0px",
-      threshold: 0.5,
-    };
-
-    const counterObserver = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          const target = parseInt(entry.target.dataset.counter, 10);
-          animateCounter(entry.target, target);
-          counterObserver.unobserve(entry.target);
-        }
-      });
-    }, observerOptions);
-
-    counters.forEach((el) => {
-      counterObserver.observe(el);
     });
   }
 
@@ -211,12 +163,7 @@
 
         if (emailInput && !isValidEmail(emailInput.value)) {
           e.preventDefault();
-          form.classList.add("is-error");
-          form.classList.remove("is-success");
           emailInput.focus();
-        } else {
-          form.classList.remove("is-error");
-          form.classList.add("is-success");
         }
       });
     });
@@ -225,27 +172,6 @@
   function isValidEmail(email) {
     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return regex.test(email);
-  }
-
-  // ========================================
-  // PARALLAX EFFECT (OPTIONAL)
-  // ========================================
-  function initParallax() {
-    const parallaxElements = document.querySelectorAll("[data-parallax]");
-
-    if (!parallaxElements.length) return;
-
-    function handleParallax() {
-      const scrollY = window.pageYOffset;
-
-      parallaxElements.forEach((el) => {
-        const speed = parseFloat(el.dataset.parallax) || 0.5;
-        const yPos = -(scrollY * speed);
-        el.style.transform = `translate3d(0, ${yPos}px, 0)`;
-      });
-    }
-
-    window.addEventListener("scroll", handleParallax, { passive: true });
   }
 
   // ========================================
@@ -277,7 +203,6 @@
         imageObserver.observe(img);
       });
     } else {
-      // Fallback for older browsers
       lazyImages.forEach((img) => {
         img.src = img.dataset.src;
         img.removeAttribute("data-src");
@@ -286,53 +211,31 @@
   }
 
   // ========================================
-  // CURRENT YEAR (FOOTER)
-  // ========================================
-  function setCurrentYear() {
-    const yearElements = document.querySelectorAll("[data-year]");
-    const currentYear = new Date().getFullYear();
-
-    yearElements.forEach((el) => {
-      el.textContent = currentYear;
-    });
-  }
-
-  // ========================================
   // INITIALIZE
   // ========================================
   function init() {
-    // Event listeners
     window.addEventListener("scroll", handleHeaderScroll, { passive: true });
     menuToggle?.addEventListener("click", toggleMobileMenu);
 
-    // Close mobile menu on nav link click
     mobileNav?.querySelectorAll(".nav-link").forEach((link) => {
       link.addEventListener("click", closeMobileMenu);
     });
 
-    // Close mobile menu on escape key
     document.addEventListener("keydown", (e) => {
       if (e.key === "Escape") {
         closeMobileMenu();
       }
     });
 
-    // Initialize features
-    handleHeaderScroll(); // Set initial state
+    handleHeaderScroll();
     initRevealAnimations();
     initStaggerAnimations();
     initSmoothScroll();
-    initCounterAnimations();
     initFaqAccordion();
     initFormValidation();
     initLazyLoad();
-    setCurrentYear();
-
-    // Optional features
-    // initParallax();
   }
 
-  // Run on DOM ready
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", init);
   } else {

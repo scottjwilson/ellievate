@@ -1,8 +1,8 @@
 <?php
 /**
- * Fieldcraft Digital 2.0 - Theme Functions
+ * Ellievated Beauty - Theme Functions
  *
- * @package Fieldcraft
+ * @package Ellievated
  */
 
 // Theme setup: menus, supports, and base assets

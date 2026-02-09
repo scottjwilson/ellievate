@@ -5,9 +5,7 @@ export default defineConfig(({ command }) => {
   const isProduction = command === "build";
 
   return {
-    // Only use base path in production builds
-    // In dev mode, Vite serves from root for simpler URLs
-    base: isProduction ? "/wp-content/themes/clean-vite-wp/" : "/",
+    base: isProduction ? "/wp-content/themes/ellievate/" : "/",
 
     build: {
       manifest: true,
@@ -15,7 +13,6 @@ export default defineConfig(({ command }) => {
       emptyOutDir: true,
       rollupOptions: {
         input: {
-          // Main entry point - CSS is imported here for HMR
           main: resolve(__dirname, "js/main.js"),
         },
         output: {
@@ -31,7 +28,6 @@ export default defineConfig(({ command }) => {
       },
     },
 
-    // Server configuration for hot reload
     server: {
       host: "localhost",
       port: 3000,
@@ -42,12 +38,10 @@ export default defineConfig(({ command }) => {
         protocol: "ws",
       },
       watch: {
-        // Watch CSS files for changes
         include: ["css/**/*.css", "js/**/*.js"],
       },
     },
 
-    // Public directory
     publicDir: false,
 
     css: {

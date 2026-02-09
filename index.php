@@ -2,50 +2,50 @@
 /**
  * Main Template File
  *
- * @package Clean_Vite_WP
+ * @package Ellievated
  */
 
 get_header(); ?>
 
-<section class="section">
+<section style="padding: 10rem 0 4rem; background: var(--color-cream-100); text-align: center;">
+    <div class="container">
+        <h1 style="font-family: var(--font-display); font-size: var(--text-hero); font-weight: 400;">Blog</h1>
+    </div>
+</section>
+
+<section class="section" style="background: white;">
     <div class="container">
         <?php if (have_posts()): ?>
-            <div class="grid grid-3">
+            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: var(--space-8);">
                 <?php while (have_posts()):
                     the_post(); ?>
-                    <article class="card card-hover">
+                    <article class="card" style="overflow: hidden;">
                         <?php if (has_post_thumbnail()): ?>
-                            <div style="aspect-ratio: 16/10; border-radius: var(--radius-lg); overflow: hidden; margin-bottom: 1rem;">
-                                <?php the_post_thumbnail("clean-vite-wp-card", [
+                            <div style="aspect-ratio: 16/10; overflow: hidden; margin: calc(var(--space-8) * -1) calc(var(--space-8) * -1) var(--space-4);">
+                                <?php the_post_thumbnail("ellievated-card", [
                                     "style" =>
                                         "width: 100%; height: 100%; object-fit: cover;",
                                 ]); ?>
                             </div>
                         <?php endif; ?>
 
-                        <span style="font-size: 0.75rem; color: var(--color-neutral-500);">
+                        <span style="font-size: var(--text-xs); color: var(--color-neutral-400); text-transform: uppercase; letter-spacing: var(--tracking-wider);">
                             <?php echo get_the_date("M j, Y"); ?>
                         </span>
 
-                        <h3 style="font-size: 1.125rem; margin: 0.5rem 0;">
-                            <a href="<?php the_permalink(); ?>" style="color: var(--color-neutral-900);">
+                        <h3 style="font-family: var(--font-display); font-size: var(--text-xl); font-weight: 500; margin: var(--space-2) 0;">
+                            <a href="<?php the_permalink(); ?>" style="color: var(--color-dark-900);">
                                 <?php the_title(); ?>
                             </a>
                         </h3>
 
-                        <p class="card-text"><?php echo wp_trim_words(
-                            get_the_excerpt(),
-                            15,
-                        ); ?></p>
+                        <p style="font-size: var(--text-sm); font-weight: 300; color: var(--color-neutral-500);">
+                            <?php echo wp_trim_words(get_the_excerpt(), 15); ?>
+                        </p>
 
-                        <a href="<?php the_permalink(); ?>" style="display: inline-flex; align-items: center; gap: 0.5rem; margin-top: 1rem; font-weight: 600; font-size: 0.875rem; color: var(--color-primary-700);">
-                            <?php esc_html_e(
-                                "Read more",
-                                "clean-vite-wp",
-                            ); ?> <?php echo clean_vite_wp_icon(
-     "arrow-right",
-     16,
- ); ?>
+                        <a href="<?php the_permalink(); ?>" class="service-link" style="margin-top: var(--space-4); display: inline-flex;">
+                            <?php esc_html_e("Read more", "ellievated"); ?>
+                            <?php echo ellievated_icon("arrow-right", 14); ?>
                         </a>
                     </article>
                 <?php
@@ -56,19 +56,19 @@ get_header(); ?>
 
         <?php else: ?>
             <div style="text-align: center; padding: 4rem 0;">
-                <h2 class="text-display"><?php esc_html_e(
+                <h2 style="font-family: var(--font-display); font-size: var(--text-3xl); font-weight: 400;"><?php esc_html_e(
                     "Nothing Found",
-                    "clean-vite-wp",
+                    "ellievated",
                 ); ?></h2>
-                <p style="color: var(--color-neutral-600); margin: 1rem 0 2rem;"><?php esc_html_e(
-                    "We couldn't find what you're looking for.",
-                    "clean-vite-wp",
+                <p style="color: var(--color-neutral-500); font-weight: 300; margin: var(--space-4) 0 var(--space-8);"><?php esc_html_e(
+                    "Check back soon for skincare tips and beauty insights.",
+                    "ellievated",
                 ); ?></p>
                 <a href="<?php echo esc_url(
                     home_url("/"),
-                ); ?>" class="btn btn-primary"><?php esc_html_e(
+                ); ?>" class="btn btn-outline"><?php esc_html_e(
     "Back to Home",
-    "clean-vite-wp",
+    "ellievated",
 ); ?></a>
             </div>
         <?php endif; ?>

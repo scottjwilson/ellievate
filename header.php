@@ -10,11 +10,8 @@
 <?php wp_body_open(); ?>
 
 <?php
-// Determine header variant based on template
 $header_class = "site-header";
-$use_light_header =
-    is_front_page() || is_page_template(["about.php", "services.php"]);
-if ($use_light_header) {
+if (is_front_page() || is_page_template(["services.php"])) {
     $header_class .= " header-light";
 }
 ?>
@@ -24,8 +21,8 @@ if ($use_light_header) {
         <div class="header-inner">
             <!-- Logo -->
             <a href="<?php echo esc_url(home_url("/")); ?>" class="site-logo">
-                <span class="logo-mark">F</span>
-                <span>Fieldcraft</span>
+                <span class="logo-mark">EB</span>
+                <span>Ellievated Beauty</span>
             </a>
 
             <!-- Desktop Navigation -->
@@ -40,32 +37,31 @@ if ($use_light_header) {
                         home_url("/services"),
                     ); ?>" class="nav-link">Services</a></li>
                     <li><a href="<?php echo esc_url(
-                        home_url("/work"),
-                    ); ?>" class="nav-link">Work</a></li>
+                        home_url("/shop"),
+                    ); ?>" class="nav-link">Shop</a></li>
                     <li><a href="<?php echo esc_url(
-                        home_url("/about"),
-                    ); ?>" class="nav-link">About</a></li>
-                    <li><a href="<?php echo esc_url(
-                        home_url("/blog"),
-                    ); ?>" class="nav-link">Blog</a></li>
+                        home_url("/contact"),
+                    ); ?>" class="nav-link">Contact</a></li>
                 </ul>
                 <div class="nav-actions">
+                    <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="nav-social" aria-label="Instagram">
+                        <?php echo ellievated_icon("instagram", 18); ?>
+                    </a>
                     <a href="<?php echo esc_url(
                         home_url("/contact"),
-                    ); ?>" class="btn btn-accent">
-                        Get in Touch
-                        <?php echo fieldcraft_icon("arrow-right"); ?>
+                    ); ?>" class="btn btn-outline">
+                        Book an Appointment
                     </a>
                 </div>
             </nav>
 
             <!-- Mobile Menu Toggle -->
             <button class="menu-toggle" aria-expanded="false" aria-label="Toggle menu">
-                <span class="icon-menu"><?php echo fieldcraft_icon(
+                <span class="icon-menu"><?php echo ellievated_icon(
                     "menu",
                     24,
                 ); ?></span>
-                <span class="icon-close"><?php echo fieldcraft_icon(
+                <span class="icon-close"><?php echo ellievated_icon(
                     "close",
                     24,
                 ); ?></span>
@@ -82,20 +78,16 @@ if ($use_light_header) {
             home_url("/services"),
         ); ?>" class="nav-link">Services</a>
         <a href="<?php echo esc_url(
-            home_url("/work"),
-        ); ?>" class="nav-link">Work</a>
+            home_url("/shop"),
+        ); ?>" class="nav-link">Shop</a>
         <a href="<?php echo esc_url(
-            home_url("/about"),
-        ); ?>" class="nav-link">About</a>
-        <a href="<?php echo esc_url(
-            home_url("/blog"),
-        ); ?>" class="nav-link">Blog</a>
+            home_url("/contact"),
+        ); ?>" class="nav-link">Contact</a>
         <div class="nav-mobile-actions">
             <a href="<?php echo esc_url(
                 home_url("/contact"),
-            ); ?>" class="btn btn-accent">
-                Get in Touch
-                <?php echo fieldcraft_icon("arrow-right"); ?>
+            ); ?>" class="btn btn-outline">
+                Book an Appointment
             </a>
         </div>
     </nav>

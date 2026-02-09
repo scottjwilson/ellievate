@@ -1,7 +1,7 @@
 {
-  "name": "clean-vite-wp",
+  "name": "ellievated-beauty",
   "version": "1.0.0",
-  "description": "A minimal WordPress theme starter with Vite",
+  "description": "Ellievated Beauty - Esthetician WordPress theme with Vite",
   "scripts": {
     "dev": "vite",
     "build": "vite build",

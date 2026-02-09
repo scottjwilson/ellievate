@@ -3,21 +3,23 @@
  * Template Name: Contact Page
  *
  * Book Now / Contact page for Ellievated Beauty.
- * Handles service booking requests via wp_mail().
+ * Uses Amelia booking plugin when active, falls back to wp_mail() form.
  *
  * @package Ellievated
  */
 
 defined("ABSPATH") || exit();
 
+$has_amelia = is_plugin_active("ameliabooking/ameliabooking.php");
 $booking_success = false;
 $booking_error = "";
 $preselected = isset($_GET["service"])
     ? sanitize_text_field($_GET["service"])
     : "";
 
-// Handle form submission
+// Handle fallback form submission (only when Amelia is not active)
 if (
+    !$has_amelia &&
     $_SERVER["REQUEST_METHOD"] === "POST" &&
     isset($_POST["ellievated_booking_nonce"])
 ) {
@@ -38,15 +40,14 @@ if (
         $pref_time = sanitize_text_field($_POST["preferred_time"] ?? "");
         $message = sanitize_textarea_field($_POST["message"] ?? "");
 
-        // Validate required fields
         if (empty($first_name) || empty($email) || empty($service)) {
             $booking_error =
                 "Please fill in your name, email, and select a service.";
         } elseif (!is_email($email)) {
             $booking_error = "Please enter a valid email address.";
         } else {
-            // Look up service name from slug
             $service_name = $service;
+            $service_price = "";
             $service_post = get_page_by_path($service, OBJECT, "product");
             if ($service_post) {
                 $service_name = $service_post->post_title;
@@ -135,7 +136,17 @@ get_header();
     line-height: 1.7;
 }
 
-/* Service Picker */
+/* Amelia Booking Embed */
+.book-amelia {
+    padding: 0 0 var(--section-pad);
+    background: var(--cream);
+}
+.book-amelia-wrapper {
+    max-width: 780px;
+    margin: 0 auto;
+}
+
+/* Service Picker (fallback) */
 .service-picker {
     padding: 3rem 0 var(--section-pad);
     background: var(--cream);
@@ -212,7 +223,7 @@ get_header();
     font-weight: 500;
 }
 
-/* Booking Form */
+/* Booking Form (fallback) */
 .book-form-section {
     padding: 0 0 var(--section-pad);
     background: var(--cream);
@@ -376,7 +387,6 @@ get_header();
     gap: 2rem;
     text-align: center;
 }
-.contact-strip-item {}
 .contact-strip-icon {
     width: 44px;
     height: 44px;
@@ -489,206 +499,222 @@ get_header();
     </div>
 </section>
 
-<?php if ($booking_success): ?>
+<?php if ($has_amelia): ?>
 
-<!-- Success -->
-<section style="padding: var(--section-pad) 0; background: var(--cream);">
-    <div class="container">
-        <div class="book-success reveal">
-            <div class="book-success-icon"><?php echo ellievated_icon(
-                "check",
-                28,
-            ); ?></div>
-            <h2>Request received!</h2>
-            <p>Thank you for booking with Ellievated Beauty. We'll confirm your appointment within 24 hours.</p>
-            <p>Check your email for a confirmation shortly.</p>
-            <a href="<?php echo esc_url(
-                home_url("/"),
-            ); ?>" class="btn-primary">Back to Home</a>
+    <!-- Amelia Booking Widget -->
+    <section class="book-amelia">
+        <div class="container">
+            <div class="book-amelia-wrapper reveal">
+                <?php echo do_shortcode("[ameliastepbooking]"); ?>
+            </div>
         </div>
-    </div>
-</section>
+    </section>
+
+<?php elseif ($booking_success): ?>
+
+    <!-- Success (fallback form) -->
+    <section style="padding: var(--section-pad) 0; background: var(--cream);">
+        <div class="container">
+            <div class="book-success reveal">
+                <div class="book-success-icon"><?php echo ellievated_icon(
+                    "check",
+                    28,
+                ); ?></div>
+                <h2>Request received!</h2>
+                <p>Thank you for booking with Ellievated Beauty. We'll confirm your appointment within 24 hours.</p>
+                <p>Check your email for a confirmation shortly.</p>
+                <a href="<?php echo esc_url(
+                    home_url("/"),
+                ); ?>" class="btn-primary">Back to Home</a>
+            </div>
+        </div>
+    </section>
 
 <?php else: ?>
 
-<!-- Service Picker -->
-<section class="service-picker" id="pick-service">
-    <div class="container">
-        <p class="service-picker-label">1. Choose your service</p>
-        <div class="service-picker-grid reveal-stagger">
-            <?php
-            $services = ellievated_get_services();
-            if ($services->have_posts()):
-                while ($services->have_posts()):
+    <!-- Service Picker (fallback form) -->
+    <section class="service-picker" id="pick-service">
+        <div class="container">
+            <p class="service-picker-label">1. Choose your service</p>
+            <div class="service-picker-grid reveal-stagger">
+                <?php
+                $services = ellievated_get_services();
+                if ($services->have_posts()):
+                    while ($services->have_posts()):
 
-                    $services->the_post();
-                    $product = wc_get_product(get_the_ID());
-                    $slug = get_post_field("post_name");
-                    $duration = get_post_meta(
-                        get_the_ID(),
-                        "_service_duration",
-                        true,
-                    );
-                    $icon = get_post_meta(get_the_ID(), "_service_icon", true);
-                    $selected = $preselected === $slug ? " selected" : "";
-                    ?>
-                <div class="service-select-card<?php echo $selected; ?>"
-                     data-slug="<?php echo esc_attr($slug); ?>"
-                     data-name="<?php echo esc_attr(get_the_title()); ?>">
-                    <?php if ($icon): ?>
-                        <div class="ssc-icon"><?php echo $icon; ?></div>
-                    <?php endif; ?>
-                    <div class="ssc-info">
-                        <div class="ssc-name"><?php the_title(); ?></div>
-                        <div class="ssc-meta">
-                            <strong>$<?php echo esc_html(
-                                $product->get_price(),
-                            ); ?></strong>
-                            <?php if ($duration): ?>
-                                &middot; <?php echo esc_html($duration); ?>
-                            <?php endif; ?>
+                        $services->the_post();
+                        $product = wc_get_product(get_the_ID());
+                        $slug = get_post_field("post_name");
+                        $duration = get_post_meta(
+                            get_the_ID(),
+                            "_service_duration",
+                            true,
+                        );
+                        $icon = get_post_meta(
+                            get_the_ID(),
+                            "_service_icon",
+                            true,
+                        );
+                        $selected = $preselected === $slug ? " selected" : "";
+                        ?>
+                    <div class="service-select-card<?php echo $selected; ?>"
+                         data-slug="<?php echo esc_attr($slug); ?>"
+                         data-name="<?php echo esc_attr(get_the_title()); ?>">
+                        <?php if ($icon): ?>
+                            <div class="ssc-icon"><?php echo $icon; ?></div>
+                        <?php endif; ?>
+                        <div class="ssc-info">
+                            <div class="ssc-name"><?php the_title(); ?></div>
+                            <div class="ssc-meta">
+                                <strong>$<?php echo esc_html(
+                                    $product->get_price(),
+                                ); ?></strong>
+                                <?php if ($duration): ?>
+                                    &middot; <?php echo esc_html($duration); ?>
+                                <?php endif; ?>
+                            </div>
                         </div>
                     </div>
-                </div>
-            <?php
-                endwhile;
-                wp_reset_postdata();
-            endif;
-            ?>
+                <?php
+                    endwhile;
+                    wp_reset_postdata();
+                endif;
+                ?>
+            </div>
         </div>
-    </div>
-</section>
+    </section>
 
-<!-- Booking Form -->
-<section class="book-form-section" id="booking-form">
-    <div class="container">
-        <div class="book-form-wrapper reveal">
-            <h2 class="book-form-title">2. Your details</h2>
-            <p class="book-form-subtitle">Fill out the form below and we'll confirm your appointment within 24 hours.</p>
+    <!-- Booking Form (fallback) -->
+    <section class="book-form-section" id="booking-form">
+        <div class="container">
+            <div class="book-form-wrapper reveal">
+                <h2 class="book-form-title">2. Your details</h2>
+                <p class="book-form-subtitle">Fill out the form below and we'll confirm your appointment within 24 hours.</p>
 
-            <?php if ($booking_error): ?>
-                <div class="book-error"><?php echo esc_html(
-                    $booking_error,
-                ); ?></div>
-            <?php endif; ?>
+                <?php if ($booking_error): ?>
+                    <div class="book-error"><?php echo esc_html(
+                        $booking_error,
+                    ); ?></div>
+                <?php endif; ?>
 
-            <form class="book-form" method="post" action="<?php echo esc_url(
-                get_permalink(),
-            ); ?>">
-                <?php wp_nonce_field(
-                    "ellievated_booking_submit",
-                    "ellievated_booking_nonce",
-                ); ?>
-                <input type="hidden" name="service" id="selected-service" value="<?php echo esc_attr(
-                    $preselected,
+                <form class="book-form" method="post" action="<?php echo esc_url(
+                    get_permalink(),
                 ); ?>">
+                    <?php wp_nonce_field(
+                        "ellievated_booking_submit",
+                        "ellievated_booking_nonce",
+                    ); ?>
+                    <input type="hidden" name="service" id="selected-service" value="<?php echo esc_attr(
+                        $preselected,
+                    ); ?>">
 
-                <!-- Selected service display -->
-                <div class="selected-service-display<?php echo $preselected
-                    ? " has-service"
-                    : ""; ?>" id="service-display">
-                    <span class="ssd-name" id="service-display-name">
-                        <?php if ($preselected) {
-                            $sp = get_page_by_path(
-                                $preselected,
-                                OBJECT,
-                                "product",
-                            );
-                            if ($sp) {
-                                echo esc_html($sp->post_title);
-                            }
-                        } ?>
-                    </span>
-                    <span class="ssd-change" id="service-change">Change</span>
-                </div>
+                    <div class="selected-service-display<?php echo $preselected
+                        ? " has-service"
+                        : ""; ?>" id="service-display">
+                        <span class="ssd-name" id="service-display-name">
+                            <?php if ($preselected) {
+                                $sp = get_page_by_path(
+                                    $preselected,
+                                    OBJECT,
+                                    "product",
+                                );
+                                if ($sp) {
+                                    echo esc_html($sp->post_title);
+                                }
+                            } ?>
+                        </span>
+                        <span class="ssd-change" id="service-change">Change</span>
+                    </div>
 
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="first-name">First Name *</label>
-                        <input type="text" id="first-name" name="first_name"
-                               placeholder="Your first name"
-                               value="<?php echo isset($_POST["first_name"])
-                                   ? esc_attr($_POST["first_name"])
-                                   : ""; ?>"
-                               required>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="first-name">First Name *</label>
+                            <input type="text" id="first-name" name="first_name"
+                                   placeholder="Your first name"
+                                   value="<?php echo isset($_POST["first_name"])
+                                       ? esc_attr($_POST["first_name"])
+                                       : ""; ?>"
+                                   required>
+                        </div>
+                        <div class="form-group">
+                            <label for="last-name">Last Name</label>
+                            <input type="text" id="last-name" name="last_name"
+                                   placeholder="Your last name"
+                                   value="<?php echo isset($_POST["last_name"])
+                                       ? esc_attr($_POST["last_name"])
+                                       : ""; ?>">
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="last-name">Last Name</label>
-                        <input type="text" id="last-name" name="last_name"
-                               placeholder="Your last name"
-                               value="<?php echo isset($_POST["last_name"])
-                                   ? esc_attr($_POST["last_name"])
-                                   : ""; ?>">
-                    </div>
-                </div>
 
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="email">Email *</label>
-                        <input type="email" id="email" name="email"
-                               placeholder="your@email.com"
-                               value="<?php echo isset($_POST["email"])
-                                   ? esc_attr($_POST["email"])
-                                   : ""; ?>"
-                               required>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="email">Email *</label>
+                            <input type="email" id="email" name="email"
+                                   placeholder="your@email.com"
+                                   value="<?php echo isset($_POST["email"])
+                                       ? esc_attr($_POST["email"])
+                                       : ""; ?>"
+                                   required>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Phone</label>
+                            <input type="tel" id="phone" name="phone"
+                                   placeholder="(123) 456-7890"
+                                   value="<?php echo isset($_POST["phone"])
+                                       ? esc_attr($_POST["phone"])
+                                       : ""; ?>">
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="phone">Phone</label>
-                        <input type="tel" id="phone" name="phone"
-                               placeholder="(123) 456-7890"
-                               value="<?php echo isset($_POST["phone"])
-                                   ? esc_attr($_POST["phone"])
-                                   : ""; ?>">
-                    </div>
-                </div>
 
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="preferred-date">Preferred Date</label>
-                        <input type="date" id="preferred-date" name="preferred_date"
-                               value="<?php echo isset($_POST["preferred_date"])
-                                   ? esc_attr($_POST["preferred_date"])
-                                   : ""; ?>">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="preferred-date">Preferred Date</label>
+                            <input type="date" id="preferred-date" name="preferred_date"
+                                   value="<?php echo isset(
+                                       $_POST["preferred_date"],
+                                   )
+                                       ? esc_attr($_POST["preferred_date"])
+                                       : ""; ?>">
+                        </div>
+                        <div class="form-group">
+                            <label for="preferred-time">Preferred Time</label>
+                            <select id="preferred-time" name="preferred_time">
+                                <option value="">Select a time...</option>
+                                <option value="morning"<?php echo isset(
+                                    $_POST["preferred_time"],
+                                ) && $_POST["preferred_time"] === "morning"
+                                    ? " selected"
+                                    : ""; ?>>Morning (9am - 12pm)</option>
+                                <option value="afternoon"<?php echo isset(
+                                    $_POST["preferred_time"],
+                                ) && $_POST["preferred_time"] === "afternoon"
+                                    ? " selected"
+                                    : ""; ?>>Afternoon (12pm - 4pm)</option>
+                                <option value="evening"<?php echo isset(
+                                    $_POST["preferred_time"],
+                                ) && $_POST["preferred_time"] === "evening"
+                                    ? " selected"
+                                    : ""; ?>>Evening (4pm - 7pm)</option>
+                            </select>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="preferred-time">Preferred Time</label>
-                        <select id="preferred-time" name="preferred_time">
-                            <option value="">Select a time...</option>
-                            <option value="morning"<?php echo isset(
-                                $_POST["preferred_time"],
-                            ) && $_POST["preferred_time"] === "morning"
-                                ? " selected"
-                                : ""; ?>>Morning (9am – 12pm)</option>
-                            <option value="afternoon"<?php echo isset(
-                                $_POST["preferred_time"],
-                            ) && $_POST["preferred_time"] === "afternoon"
-                                ? " selected"
-                                : ""; ?>>Afternoon (12pm – 4pm)</option>
-                            <option value="evening"<?php echo isset(
-                                $_POST["preferred_time"],
-                            ) && $_POST["preferred_time"] === "evening"
-                                ? " selected"
-                                : ""; ?>>Evening (4pm – 7pm)</option>
-                        </select>
+
+                    <div class="form-group full-width">
+                        <label for="message">Notes <span style="font-weight:300; text-transform:none; letter-spacing:0; font-size:12px; color:var(--text-muted);">(optional)</span></label>
+                        <textarea id="message" name="message" placeholder="Any skin concerns, allergies, or preferences we should know about..."><?php echo isset(
+                            $_POST["message"],
+                        )
+                            ? esc_textarea($_POST["message"])
+                            : ""; ?></textarea>
                     </div>
-                </div>
 
-                <div class="form-group full-width">
-                    <label for="message">Notes <span style="font-weight:300; text-transform:none; letter-spacing:0; font-size:12px; color:var(--text-muted);">(optional)</span></label>
-                    <textarea id="message" name="message" placeholder="Any skin concerns, allergies, or preferences we should know about..."><?php echo isset(
-                        $_POST["message"],
-                    )
-                        ? esc_textarea($_POST["message"])
-                        : ""; ?></textarea>
-                </div>
-
-                <button type="submit" class="btn-primary">
-                    Request Appointment
-                </button>
-            </form>
+                    <button type="submit" class="btn-primary">
+                        Request Appointment
+                    </button>
+                </form>
+            </div>
         </div>
-    </div>
-</section>
+    </section>
 
 <?php endif; ?>
 

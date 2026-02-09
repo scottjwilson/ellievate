@@ -7,21 +7,22 @@
 
 get_header(); ?>
 
-<section style="padding: 10rem 0 4rem; background: var(--color-cream-100); text-align: center;">
+<section style="padding: 10rem 0 4rem; background: var(--cream); text-align: center;">
     <div class="container">
-        <h1 style="font-family: var(--font-display); font-size: var(--text-hero); font-weight: 400;">Blog</h1>
+        <p class="section-label">Journal</p>
+        <h1 class="section-title">Beauty <em class="swash">insights</em></h1>
     </div>
 </section>
 
-<section class="section" style="background: white;">
+<section style="padding: var(--section-pad) 0; background: var(--cream);">
     <div class="container">
         <?php if (have_posts()): ?>
-            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: var(--space-8);">
+            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 2rem;">
                 <?php while (have_posts()):
                     the_post(); ?>
-                    <article class="card" style="overflow: hidden;">
+                    <article class="reveal" style="background: var(--pearl); padding: 0; overflow: hidden;">
                         <?php if (has_post_thumbnail()): ?>
-                            <div style="aspect-ratio: 16/10; overflow: hidden; margin: calc(var(--space-8) * -1) calc(var(--space-8) * -1) var(--space-4);">
+                            <div style="aspect-ratio: 16/10; overflow: hidden;">
                                 <?php the_post_thumbnail("ellievated-card", [
                                     "style" =>
                                         "width: 100%; height: 100%; object-fit: cover;",
@@ -29,24 +30,32 @@ get_header(); ?>
                             </div>
                         <?php endif; ?>
 
-                        <span style="font-size: var(--text-xs); color: var(--color-neutral-400); text-transform: uppercase; letter-spacing: var(--tracking-wider);">
-                            <?php echo get_the_date("M j, Y"); ?>
-                        </span>
+                        <div style="padding: 1.5rem;">
+                            <span style="font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; font-weight: 500;">
+                                <?php echo get_the_date("M j, Y"); ?>
+                            </span>
 
-                        <h3 style="font-family: var(--font-display); font-size: var(--text-xl); font-weight: 500; margin: var(--space-2) 0;">
-                            <a href="<?php the_permalink(); ?>" style="color: var(--color-dark-900);">
-                                <?php the_title(); ?>
+                            <h3 style="font-family: var(--font-display); font-size: 1.4rem; font-weight: 400; margin: 0.5rem 0; color: var(--ink);">
+                                <a href="<?php the_permalink(); ?>" style="color: inherit; text-decoration: none;">
+                                    <?php the_title(); ?>
+                                </a>
+                            </h3>
+
+                            <p style="font-size: 0.9rem; font-weight: 300; color: var(--text-muted); line-height: 1.6;">
+                                <?php echo wp_trim_words(
+                                    get_the_excerpt(),
+                                    15,
+                                ); ?>
+                            </p>
+
+                            <a href="<?php the_permalink(); ?>" style="display: inline-flex; align-items: center; gap: 0.5rem; margin-top: 1rem; font-size: 0.8rem; font-weight: 500; color: var(--olive); text-decoration: none; text-transform: uppercase; letter-spacing: 0.08em;">
+                                <?php esc_html_e("Read more", "ellievated"); ?>
+                                <?php echo ellievated_icon(
+                                    "arrow-right",
+                                    14,
+                                ); ?>
                             </a>
-                        </h3>
-
-                        <p style="font-size: var(--text-sm); font-weight: 300; color: var(--color-neutral-500);">
-                            <?php echo wp_trim_words(get_the_excerpt(), 15); ?>
-                        </p>
-
-                        <a href="<?php the_permalink(); ?>" class="service-link" style="margin-top: var(--space-4); display: inline-flex;">
-                            <?php esc_html_e("Read more", "ellievated"); ?>
-                            <?php echo ellievated_icon("arrow-right", 14); ?>
-                        </a>
+                        </div>
                     </article>
                 <?php
                 endwhile; ?>
@@ -56,17 +65,17 @@ get_header(); ?>
 
         <?php else: ?>
             <div style="text-align: center; padding: 4rem 0;">
-                <h2 style="font-family: var(--font-display); font-size: var(--text-3xl); font-weight: 400;"><?php esc_html_e(
+                <h2 style="font-family: var(--font-display); font-size: clamp(1.8rem, 3vw, 2.4rem); font-weight: 400; color: var(--ink);"><?php esc_html_e(
                     "Nothing Found",
                     "ellievated",
                 ); ?></h2>
-                <p style="color: var(--color-neutral-500); font-weight: 300; margin: var(--space-4) 0 var(--space-8);"><?php esc_html_e(
+                <p style="color: var(--text-muted); font-weight: 300; margin: 1rem 0 2rem; line-height: 1.7;"><?php esc_html_e(
                     "Check back soon for skincare tips and beauty insights.",
                     "ellievated",
                 ); ?></p>
                 <a href="<?php echo esc_url(
                     home_url("/"),
-                ); ?>" class="btn btn-outline"><?php esc_html_e(
+                ); ?>" class="btn-outline"><?php esc_html_e(
     "Back to Home",
     "ellievated",
 ); ?></a>

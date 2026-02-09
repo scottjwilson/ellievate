@@ -14,7 +14,7 @@ get_header(); ?>
 .contact-hero {
     position: relative;
     padding: 10rem 0 6rem;
-    background: var(--color-cream-100);
+    background: var(--cream);
     text-align: center;
 }
 
@@ -23,18 +23,18 @@ get_header(); ?>
     margin: 0 auto;
 }
 
-.contact-hero .text-label {
-    color: var(--color-primary-600);
-    margin-bottom: var(--space-4);
+.contact-hero .section-label {
+    margin-bottom: 1rem;
     display: block;
 }
 
 .contact-hero h1 {
     font-family: var(--font-display);
-    font-size: var(--text-hero);
+    font-size: clamp(2.8rem, 5vw, 4rem);
     font-weight: 400;
-    color: var(--color-dark-900);
-    margin-bottom: var(--space-6);
+    color: var(--ink);
+    margin-bottom: 1.5rem;
+    line-height: 1.1;
 }
 
 .contact-hero h1 em {
@@ -43,56 +43,57 @@ get_header(); ?>
 }
 
 .contact-hero-text {
-    font-size: var(--text-lg);
+    font-size: 1.125rem;
     font-weight: 300;
-    color: var(--color-neutral-500);
-    line-height: var(--leading-relaxed);
+    color: var(--text-muted);
+    line-height: 1.7;
 }
 
 /* Contact Section */
 .contact-section {
-    padding: var(--section-padding) 0;
-    background: white;
+    padding: var(--section-pad) 0;
+    background: var(--cream);
 }
 
 .contact-grid {
     display: grid;
-    gap: var(--space-12);
+    gap: 3rem;
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 900px) {
     .contact-grid {
         grid-template-columns: 1fr 1.2fr;
-        gap: var(--space-16);
+        gap: 4rem;
     }
 }
 
 /* Contact Info */
 .contact-info h2 {
     font-family: var(--font-display);
-    font-size: var(--text-3xl);
-    font-weight: 500;
-    margin-bottom: var(--space-4);
+    font-size: clamp(1.8rem, 3vw, 2.4rem);
+    font-weight: 400;
+    color: var(--ink);
+    margin-bottom: 1rem;
 }
 
 .contact-info > p {
     font-weight: 300;
-    color: var(--color-neutral-500);
-    line-height: var(--leading-relaxed);
-    margin-bottom: var(--space-8);
+    color: var(--text-muted);
+    line-height: 1.7;
+    margin-bottom: 2rem;
 }
 
 .contact-methods {
     display: flex;
     flex-direction: column;
-    gap: var(--space-6);
-    margin-bottom: var(--space-10);
+    gap: 1.5rem;
+    margin-bottom: 2.5rem;
 }
 
 .contact-method {
     display: flex;
     align-items: flex-start;
-    gap: var(--space-4);
+    gap: 1rem;
 }
 
 .contact-method-icon {
@@ -101,85 +102,97 @@ get_header(); ?>
     display: flex;
     align-items: center;
     justify-content: center;
-    background: var(--color-cream-200);
-    color: var(--color-primary-700);
+    background: var(--pearl);
+    color: var(--olive);
+    border-radius: 50%;
     flex-shrink: 0;
 }
 
 .contact-method h4 {
-    font-family: var(--font-display);
-    font-size: var(--text-base);
+    font-family: var(--font-body);
+    font-size: 0.75rem;
     font-weight: 500;
-    margin-bottom: var(--space-1);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    margin-bottom: 0.25rem;
 }
 
 .contact-method p {
-    font-size: var(--text-sm);
-    font-weight: 300;
-    color: var(--color-neutral-500);
+    font-size: 0.95rem;
+    font-weight: 400;
+    color: var(--ink);
 }
 
 .contact-method a {
-    color: var(--color-primary-600);
-    transition: color var(--transition-fast);
+    color: var(--olive);
+    text-decoration: none;
+    transition: color 0.3s var(--ease-out);
 }
 
 .contact-method a:hover {
-    color: var(--color-primary-700);
+    color: var(--forest);
 }
 
 /* Social Links */
 .contact-social {
-    padding-top: var(--space-8);
-    border-top: 1px solid var(--color-neutral-200);
+    padding-top: 2rem;
+    border-top: 1px solid var(--border);
 }
 
 .contact-social h4 {
     font-family: var(--font-body);
-    font-size: var(--text-xs);
+    font-size: 0.7rem;
     font-weight: 500;
     text-transform: uppercase;
-    letter-spacing: var(--tracking-widest);
-    color: var(--color-neutral-400);
-    margin-bottom: var(--space-4);
+    letter-spacing: 0.12em;
+    color: var(--text-muted);
+    margin-bottom: 1rem;
 }
 
-.social-links {
+.contact-social-links {
     display: flex;
-    gap: var(--space-3);
+    gap: 0.75rem;
 }
 
-.social-links a {
-    width: 44px;
-    height: 44px;
+.contact-social-links a {
+    width: 40px;
+    height: 40px;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: var(--color-cream-100);
-    color: var(--color-neutral-600);
-    transition: all var(--transition-base);
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    color: var(--text-muted);
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    text-decoration: none;
+    transition: all 0.3s var(--ease-out);
 }
 
-.social-links a:hover {
-    background: var(--color-primary-600);
+.contact-social-links a:hover {
+    background: var(--olive);
+    border-color: var(--olive);
     color: white;
 }
 
 /* Contact Form */
 .contact-form-wrapper {
-    background: var(--color-cream-50);
-    padding: var(--space-10);
+    background: var(--pearl);
+    padding: 2.5rem;
+    border-radius: 0;
 }
 
 .contact-form {
     display: flex;
     flex-direction: column;
-    gap: var(--space-5);
+    gap: 1.25rem;
 }
 
 .form-row {
     display: grid;
-    gap: var(--space-5);
+    gap: 1.25rem;
 }
 
 @media (min-width: 640px) {
@@ -191,39 +204,40 @@ get_header(); ?>
 .form-group {
     display: flex;
     flex-direction: column;
-    gap: var(--space-2);
+    gap: 0.5rem;
 }
 
 .form-group label {
-    font-size: var(--text-xs);
+    font-size: 0.7rem;
     font-weight: 500;
     text-transform: uppercase;
-    letter-spacing: var(--tracking-wider);
-    color: var(--color-dark-800);
+    letter-spacing: 0.1em;
+    color: var(--ink);
 }
 
 .form-group input,
 .form-group select,
 .form-group textarea {
-    padding: var(--space-4);
-    background: white;
-    border: 1px solid var(--color-neutral-200);
-    font-size: var(--text-base);
+    padding: 0.875rem 1rem;
+    background: var(--cream);
+    border: 1px solid var(--border);
+    font-family: var(--font-body);
+    font-size: 0.95rem;
     font-weight: 300;
-    transition: all var(--transition-fast);
+    color: var(--ink);
+    transition: border-color 0.3s var(--ease-out);
 }
 
 .form-group input:focus,
 .form-group select:focus,
 .form-group textarea:focus {
     outline: none;
-    border-color: var(--color-primary-500);
-    box-shadow: 0 0 0 3px var(--color-primary-100);
+    border-color: var(--sage);
 }
 
 .form-group input::placeholder,
 .form-group textarea::placeholder {
-    color: var(--color-neutral-400);
+    color: var(--sage);
 }
 
 .form-group textarea {
@@ -235,27 +249,35 @@ get_header(); ?>
     grid-column: 1 / -1;
 }
 
-.contact-form .btn {
+.contact-form .btn-primary {
     align-self: flex-start;
 }
 
 /* FAQ Section */
 .contact-faq {
-    padding: var(--section-padding) 0;
-    background: var(--color-cream-50);
+    padding: var(--section-pad) 0;
+    background: var(--pearl);
+}
+
+.contact-faq .section-label {
+    text-align: center;
+}
+
+.contact-faq .section-title {
+    text-align: center;
 }
 
 .faq-list {
     max-width: 700px;
-    margin: var(--space-12) auto 0;
+    margin: 3rem auto 0;
     display: flex;
     flex-direction: column;
-    gap: var(--space-4);
+    gap: 1rem;
 }
 
 .faq-item {
-    background: white;
-    border: 1px solid var(--color-neutral-200);
+    background: var(--cream);
+    border: 1px solid var(--border);
     overflow: hidden;
 }
 
@@ -264,21 +286,21 @@ get_header(); ?>
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: var(--space-4);
-    padding: var(--space-5) var(--space-6);
+    gap: 1rem;
+    padding: 1.25rem 1.5rem;
     font-family: var(--font-display);
-    font-size: var(--text-lg);
+    font-size: 1.15rem;
     font-weight: 500;
-    color: var(--color-dark-900);
+    color: var(--ink);
     text-align: left;
     background: none;
     border: none;
     cursor: pointer;
-    transition: background var(--transition-fast);
+    transition: background 0.3s var(--ease-out);
 }
 
 .faq-question:hover {
-    background: var(--color-cream-50);
+    background: var(--pearl);
 }
 
 .faq-icon {
@@ -287,27 +309,47 @@ get_header(); ?>
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--color-neutral-500);
+    color: var(--text-muted);
     flex-shrink: 0;
-    transition: all var(--transition-base);
+    transition: all 0.3s var(--ease-out);
 }
 
 .faq-item.is-open .faq-icon {
     transform: rotate(45deg);
-    color: var(--color-primary-600);
+    color: var(--olive);
 }
 
 .faq-answer {
     display: none;
-    padding: 0 var(--space-6) var(--space-5);
-    font-size: var(--text-sm);
+    padding: 0 1.5rem 1.25rem;
+    font-size: 0.9rem;
     font-weight: 300;
-    color: var(--color-neutral-500);
-    line-height: var(--leading-relaxed);
+    color: var(--text-muted);
+    line-height: 1.7;
 }
 
 .faq-item.is-open .faq-answer {
     display: block;
+}
+
+/* CTA Section */
+.contact-cta {
+    padding: var(--section-pad) 0;
+    background: linear-gradient(135deg, var(--forest) 0%, var(--black) 100%);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.contact-cta::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -20%;
+    width: 60%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(157,168,142,0.08) 0%, transparent 70%);
+    pointer-events: none;
 }
 </style>
 
@@ -315,7 +357,7 @@ get_header(); ?>
 <section class="contact-hero">
     <div class="container">
         <div class="contact-hero-content reveal">
-            <span class="text-label">Book Now</span>
+            <span class="section-label">Book Now</span>
             <h1>Let's get you <em>glowing</em></h1>
             <p class="contact-hero-text">
                 Ready for your appointment? Reach out to book a service or ask any questions about our treatments.
@@ -338,7 +380,7 @@ get_header(); ?>
                 <div class="contact-methods">
                     <div class="contact-method">
                         <div class="contact-method-icon">
-                            <?php echo ellievated_icon("mail", 22); ?>
+                            <?php echo ellievated_icon("mail", 20); ?>
                         </div>
                         <div>
                             <h4>Email</h4>
@@ -348,7 +390,7 @@ get_header(); ?>
 
                     <div class="contact-method">
                         <div class="contact-method-icon">
-                            <?php echo ellievated_icon("phone", 22); ?>
+                            <?php echo ellievated_icon("phone", 20); ?>
                         </div>
                         <div>
                             <h4>Phone</h4>
@@ -358,7 +400,7 @@ get_header(); ?>
 
                     <div class="contact-method">
                         <div class="contact-method-icon">
-                            <?php echo ellievated_icon("map-pin", 22); ?>
+                            <?php echo ellievated_icon("map-pin", 20); ?>
                         </div>
                         <div>
                             <h4>Location</h4>
@@ -368,7 +410,7 @@ get_header(); ?>
 
                     <div class="contact-method">
                         <div class="contact-method-icon">
-                            <?php echo ellievated_icon("clock", 22); ?>
+                            <?php echo ellievated_icon("clock", 20); ?>
                         </div>
                         <div>
                             <h4>Hours</h4>
@@ -379,22 +421,16 @@ get_header(); ?>
 
                 <div class="contact-social">
                     <h4>Follow Us</h4>
-                    <div class="social-links">
-                        <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
-                            <?php echo ellievated_icon("instagram", 18); ?>
-                        </a>
-                        <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
-                            <?php echo ellievated_icon("facebook", 18); ?>
-                        </a>
-                        <a href="https://tiktok.com" target="_blank" rel="noopener noreferrer" aria-label="TikTok">
-                            <?php echo ellievated_icon("tiktok", 18); ?>
-                        </a>
+                    <div class="contact-social-links">
+                        <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" aria-label="Instagram">ig</a>
+                        <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" aria-label="Facebook">fb</a>
+                        <a href="https://tiktok.com" target="_blank" rel="noopener noreferrer" aria-label="TikTok">tk</a>
                     </div>
                 </div>
             </div>
 
             <!-- Contact Form -->
-            <div class="contact-form-wrapper reveal reveal-delay-1">
+            <div class="contact-form-wrapper reveal">
                 <form class="contact-form" action="#" method="post">
                     <div class="form-row">
                         <div class="form-group">
@@ -422,8 +458,8 @@ get_header(); ?>
                         <label for="service">Service Interested In</label>
                         <select id="service" name="service">
                             <option value="">Select a service...</option>
-                            <option value="signature-facial">Signature Facial</option>
-                            <option value="brow-wax">Brow Wax</option>
+                            <option value="custom-facial">Custom Facial</option>
+                            <option value="brow-wax">Brow Wax & Shape</option>
                             <option value="brazilian-wax">Brazilian Wax</option>
                             <option value="other">Other / General Question</option>
                         </select>
@@ -434,10 +470,8 @@ get_header(); ?>
                         <textarea id="message" name="message" placeholder="Tell us about what you're looking for, any skin concerns, or preferred appointment times..."></textarea>
                     </div>
 
-                    <button type="submit" class="btn btn-outline btn-lg">
-                        Send Message <?php echo ellievated_icon(
-                            "arrow-right",
-                        ); ?>
+                    <button type="submit" class="btn-primary">
+                        Send Message
                     </button>
                 </form>
             </div>
@@ -448,9 +482,9 @@ get_header(); ?>
 <!-- FAQ Section -->
 <section class="contact-faq">
     <div class="container">
-        <div class="section-header center reveal">
-            <span class="text-label">FAQ</span>
-            <h2 class="text-display">Common questions</h2>
+        <div class="reveal">
+            <p class="section-label">FAQ</p>
+            <h2 class="section-title">Common questions</h2>
         </div>
 
         <div class="faq-list">
@@ -467,7 +501,7 @@ get_header(); ?>
                 </div>
             </div>
 
-            <div class="faq-item reveal reveal-delay-1">
+            <div class="faq-item reveal">
                 <button class="faq-question">
                     <span>How long does each service take?</span>
                     <span class="faq-icon"><?php echo ellievated_icon(
@@ -476,11 +510,11 @@ get_header(); ?>
                     ); ?></span>
                 </button>
                 <div class="faq-answer">
-                    A Signature Facial typically takes 60-75 minutes. A Brow Wax takes about 15-20 minutes. A Brazilian Wax takes approximately 30-45 minutes. Times may vary based on individual needs.
+                    A Custom Facial typically takes 60 minutes. A Brow Wax & Shape takes about 15 minutes. A Brazilian Wax takes approximately 30 minutes. Times may vary based on individual needs.
                 </div>
             </div>
 
-            <div class="faq-item reveal reveal-delay-2">
+            <div class="faq-item reveal">
                 <button class="faq-question">
                     <span>What is your cancellation policy?</span>
                     <span class="faq-icon"><?php echo ellievated_icon(
@@ -493,7 +527,7 @@ get_header(); ?>
                 </div>
             </div>
 
-            <div class="faq-item reveal reveal-delay-3">
+            <div class="faq-item reveal">
                 <button class="faq-question">
                     <span>Is waxing painful?</span>
                     <span class="faq-icon"><?php echo ellievated_icon(
@@ -505,6 +539,18 @@ get_header(); ?>
                     We use premium hard wax and gentle techniques to minimize discomfort. Most clients find the process much more comfortable than expected, especially with regular appointments. We also provide pre and post-wax care to soothe the skin.
                 </div>
             </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="contact-cta">
+    <div class="container">
+        <div class="reveal" style="max-width: 600px; margin: 0 auto;">
+            <p class="section-label" style="color: var(--sage);">Ready?</p>
+            <h2 class="section-title" style="color: white;">Book your appointment <em class="swash">today</em></h2>
+            <p style="color: var(--sage-light); font-weight: 300; line-height: 1.7; margin-bottom: 2rem;">Your skin deserves expert care. Let's create a personalized treatment plan just for you.</p>
+            <a href="#" class="btn-on-dark">Book a Consultation</a>
         </div>
     </div>
 </section>

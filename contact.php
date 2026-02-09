@@ -214,7 +214,7 @@ get_header();
 /* ═══ BOOKING STEPS CONTAINER ═══ */
 .booking-steps { background: var(--cream); padding-bottom: var(--section-pad); }
 .booking-step {
-    display: none; max-width: 820px; margin: 0 auto;
+    display: none; max-width: 960px; margin: 0 auto;
     animation: fadeUp 0.5s var(--ease-out);
 }
 .booking-step.step-active { display: block; }
@@ -227,7 +227,7 @@ get_header();
 }
 .service-picker-grid {
     display: grid; grid-template-columns: 1fr;
-    gap: 1rem; max-width: 680px; margin: 0 auto;
+    gap: 1rem; max-width: 800px; margin: 0 auto;
 }
 .service-select-card {
     display: flex; align-items: center; gap: 1rem;
@@ -407,7 +407,7 @@ get_header();
 /* Step Navigation */
 .step-nav {
     display: flex; align-items: center; justify-content: space-between;
-    margin-top: 2rem; max-width: 680px; margin-left: auto; margin-right: auto;
+    margin-top: 2rem; max-width: 800px; margin-left: auto; margin-right: auto;
 }
 .step-nav:not(:has(.step-back)) .step-next { width: 100%; }
 .step-back {

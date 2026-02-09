@@ -159,27 +159,27 @@ get_header();
 <style>
 /* ═══ BOOK NOW PAGE ═══ */
 .book-hero {
-    padding: 10rem 0 3rem;
+    padding: 6.5rem 0 0;
     background: var(--cream);
     text-align: center;
 }
 .book-hero-content { max-width: 560px; margin: 0 auto; }
 .book-hero h1 {
     font-family: var(--font-display);
-    font-size: clamp(2.8rem, 5vw, 4rem);
+    font-size: clamp(2rem, 4vw, 2.8rem);
     font-weight: 300; color: var(--ink);
-    margin-bottom: 1rem; line-height: 1.1;
+    margin-bottom: 0.5rem; line-height: 1.1;
 }
 .book-hero h1 em { font-style: italic; }
 .book-hero-text {
-    font-size: 1.05rem; font-weight: 300;
-    color: var(--text-muted); line-height: 1.7;
+    font-size: 0.95rem; font-weight: 300;
+    color: var(--text-muted); line-height: 1.6;
 }
 
 /* ═══ STEP INDICATOR ═══ */
 .step-indicator {
     display: flex; align-items: center; justify-content: center;
-    gap: 0; padding: 2rem 0 3rem; background: var(--cream);
+    gap: 0; padding: 1.5rem 0 2rem; background: var(--cream);
 }
 .step-item {
     display: flex; align-items: center; gap: 0.6rem;
@@ -503,7 +503,6 @@ get_header();
 <section class="book-hero">
     <div class="container">
         <div class="book-hero-content reveal">
-            <span class="section-label">Book Now</span>
             <h1>Let's get you <em>glowing</em></h1>
             <p class="book-hero-text">Choose your service, pick a time that works, and we'll take care of the rest.</p>
         </div>

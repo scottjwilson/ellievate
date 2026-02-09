@@ -83,9 +83,7 @@ get_header(); ?>
                     <div class="service-price">$<?php echo esc_html(
                         $product->get_price(),
                     ); ?> <span>/ session</span></div>
-                    <a href="<?php echo esc_url(
-                        home_url("/contact"),
-                    ); ?>" class="btn btn-primary service-book">Book</a>
+                    <a href="<?php the_permalink(); ?>" class="btn btn-primary service-book">Book</a>
                 </div>
             </div>
             <?php

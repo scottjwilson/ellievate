@@ -227,9 +227,7 @@ get_header(); ?>
                     </div>
                     <?php endif;
                 endif; ?>
-                <a href="<?php echo esc_url(
-                    home_url("/contact"),
-                ); ?>" class="btn btn-primary">Book Now</a>
+                <a href="<?php the_permalink(); ?>" class="btn btn-primary">Book Now</a>
             </div>
         </div>
         <?php

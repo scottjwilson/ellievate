@@ -8,19 +8,21 @@
  * @package Ellievated
  */
 
-defined('ABSPATH') || exit();
+defined("ABSPATH") || exit();
 
 get_header();
 
-while (have_posts()): the_post();
+while (have_posts()):
+
+    the_post();
     global $product;
 
-    $duration = get_post_meta(get_the_ID(), '_service_duration', true);
-    $icon     = get_post_meta(get_the_ID(), '_service_icon', true);
-    $features = get_post_meta(get_the_ID(), '_service_features', true);
-    $cats     = get_the_terms(get_the_ID(), 'product_cat');
-    $cat_name = ($cats && !is_wp_error($cats)) ? $cats[0]->name : '';
-?>
+    $duration = get_post_meta(get_the_ID(), "_service_duration", true);
+    $icon = get_post_meta(get_the_ID(), "_service_icon", true);
+    $features = get_post_meta(get_the_ID(), "_service_features", true);
+    $cats = get_the_terms(get_the_ID(), "product_cat");
+    $cat_name = $cats && !is_wp_error($cats) ? $cats[0]->name : "";
+    ?>
 
 <style>
 /* Single Service Page */
@@ -282,22 +284,28 @@ while (have_posts()): the_post();
 <section class="service-hero">
     <div class="container">
         <div class="service-hero-content reveal">
-            <a href="<?php echo esc_url(get_permalink(wc_get_page_id('shop'))); ?>" class="service-back">
-                <?php echo ellievated_icon('arrow-right', 14); ?>
+            <a href="<?php echo esc_url(
+                get_permalink(wc_get_page_id("shop")),
+            ); ?>" class="service-back">
+                <?php echo ellievated_icon("arrow-right", 14); ?>
                 All Services
             </a>
 
             <?php if ($cat_name): ?>
-                <p class="service-hero-cat"><?php echo esc_html($cat_name); ?></p>
+                <p class="service-hero-cat"><?php echo esc_html(
+                    $cat_name,
+                ); ?></p>
             <?php endif; ?>
 
             <h1 class="service-hero-title"><?php the_title(); ?></h1>
 
             <div class="service-hero-meta">
-                <div class="service-hero-price">$<?php echo esc_html($product->get_price()); ?> <span>/ session</span></div>
+                <div class="service-hero-price">$<?php echo esc_html(
+                    $product->get_price(),
+                ); ?> <span>/ session</span></div>
                 <?php if ($duration): ?>
                     <span class="service-hero-duration">
-                        <?php echo ellievated_icon('clock', 14); ?>
+                        <?php echo ellievated_icon("clock", 14); ?>
                         <?php echo esc_html($duration); ?>
                     </span>
                 <?php endif; ?>
@@ -308,23 +316,40 @@ while (have_posts()): the_post();
             <?php endif; ?>
 
             <div class="service-hero-actions">
-                <a href="<?php echo esc_url(home_url('/contact')); ?>" class="btn-primary">Book This Service</a>
-                <a href="<?php echo esc_url(home_url('/contact')); ?>" class="btn-outline">Ask a Question</a>
+                <a href="<?php echo esc_url(
+                    add_query_arg(
+                        "service",
+                        get_post_field("post_name"),
+                        home_url("/contact"),
+                    ),
+                ); ?>" class="btn-primary">Book This Service</a>
+                <a href="<?php echo esc_url(
+                    home_url("/contact"),
+                ); ?>" class="btn-outline">Ask a Question</a>
             </div>
         </div>
 
         <div class="service-hero-visual reveal">
             <?php if (has_post_thumbnail()): ?>
-                <?php the_post_thumbnail('ellievated-service', ['style' => 'border-radius: 32px; width: 100%; max-width: 420px; height: auto;']); ?>
-            <?php else:
+                <?php the_post_thumbnail("ellievated-service", [
+                    "style" =>
+                        "border-radius: 32px; width: 100%; max-width: 420px; height: auto;",
+                ]); ?>
+            <?php
                 // Gradient placeholder with icon
+                // Gradient placeholder with icon
+                // Gradient placeholder with icon
+                // Gradient placeholder with icon
+                else:
                 $gradients = [
-                    'linear-gradient(160deg, var(--sage-light) 0%, var(--sage) 50%, var(--olive) 100%)',
-                    'linear-gradient(160deg, #e4e8dc 0%, #ced5c2 50%, var(--sage) 100%)',
-                    'linear-gradient(160deg, var(--olive) 0%, var(--forest) 50%, var(--black) 100%)',
+                    "linear-gradient(160deg, var(--sage-light) 0%, var(--sage) 50%, var(--olive) 100%)",
+                    "linear-gradient(160deg, #e4e8dc 0%, #ced5c2 50%, var(--sage) 100%)",
+                    "linear-gradient(160deg, var(--olive) 0%, var(--forest) 50%, var(--black) 100%)",
                 ];
-                $gradient = $gradients[($product->get_menu_order() - 1) % 3] ?? $gradients[0];
-            ?>
+                $gradient =
+                    $gradients[($product->get_menu_order() - 1) % 3] ??
+                    $gradients[0];
+                ?>
                 <div class="service-visual-frame">
                     <div class="service-visual-gradient" style="background: <?php echo $gradient; ?>;"></div>
                     <div class="service-visual-inner">
@@ -342,8 +367,7 @@ while (have_posts()): the_post();
 <?php
 $content = get_the_content();
 $has_features = $features && trim($features);
-if ($content || $has_features):
-?>
+if ($content || $has_features): ?>
 <section class="service-features-section">
     <div class="container">
         <div class="service-features-grid">
@@ -357,9 +381,10 @@ if ($content || $has_features):
             <?php endif; ?>
 
             <?php if ($has_features):
-                $feature_list = array_filter(array_map('trim', explode("\n", $features)));
-                if ($feature_list):
-            ?>
+                $feature_list = array_filter(
+                    array_map("trim", explode("\n", $features)),
+                );
+                if ($feature_list): ?>
                 <div class="service-features-list reveal">
                     <h3>What's included</h3>
                     <div class="sfl-items">
@@ -371,14 +396,13 @@ if ($content || $has_features):
                         <?php endforeach; ?>
                     </div>
                 </div>
-            <?php
-                endif;
-            endif;
-            ?>
+            <?php endif;
+            endif; ?>
         </div>
     </div>
 </section>
-<?php endif; ?>
+<?php endif;
+?>
 
 <!-- CTA -->
 <section class="service-cta">
@@ -386,12 +410,22 @@ if ($content || $has_features):
         <div class="reveal">
             <p class="section-label" style="color: var(--sage);">Ready to book?</p>
             <h2 class="section-title" style="color: white;">Your skin will <em class="swash" style="display:inline; width:auto; height:auto; background:none;">thank you</em></h2>
-            <p class="service-cta-text">Book your <?php echo esc_html(strtolower(get_the_title())); ?> today and experience the Ellievated difference.</p>
-            <a href="<?php echo esc_url(home_url('/contact')); ?>" class="btn-light">Book Appointment</a>
+            <p class="service-cta-text">Book your <?php echo esc_html(
+                strtolower(get_the_title()),
+            ); ?> today and experience the Ellievated difference.</p>
+            <a href="<?php echo esc_url(
+                add_query_arg(
+                    "service",
+                    get_post_field("post_name"),
+                    home_url("/contact"),
+                ),
+            ); ?>" class="btn-light">Book Appointment</a>
         </div>
     </div>
 </section>
 
-<?php endwhile; ?>
+<?php
+endwhile;
+?>
 
 <?php get_footer(); ?>

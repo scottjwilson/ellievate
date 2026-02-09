@@ -96,6 +96,19 @@ if (
 
             if (wp_mail($to, $subject, $body, $headers)) {
                 $booking_success = true;
+
+                // Save booking to database
+                ellievated_save_booking([
+                    "service_slug" => $service,
+                    "service_name" => $service_name,
+                    "booking_date" => $pref_date,
+                    "booking_time" => $pref_time,
+                    "first_name" => $first_name,
+                    "last_name" => $last_name,
+                    "email" => $email,
+                    "phone" => $phone,
+                    "message" => $message,
+                ]);
             } else {
                 $booking_error =
                     "Something went wrong sending your request. Please try calling or emailing us directly.";
@@ -263,6 +276,14 @@ get_header();
 }
 .time-slot:hover { border-color: var(--sage); background: var(--cream); }
 .time-slot.selected { background: var(--olive); color: #fff; border-color: var(--olive); }
+.time-slot.booked {
+    opacity: 0.35; text-decoration: line-through;
+    pointer-events: none; cursor: default;
+}
+.time-slots-loading {
+    text-align: center; padding: 2rem; color: var(--text-muted);
+    font-size: 14px;
+}
 
 /* ═══ STEP 3: DETAILS + SUMMARY ═══ */
 .details-grid {

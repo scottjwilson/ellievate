@@ -333,24 +333,61 @@
       selectedTime = "";
       if (inputTime) inputTime.value = "";
       timeSlotsSection.style.display = "block";
+      timeSlotsGrid.innerHTML =
+        '<div class="time-slots-loading">Checking availability&hellip;</div>';
 
-      let html = "";
-      timeSlots.forEach((slot) => {
-        html +=
-          '<div class="time-slot" data-time="' + slot + '">' + slot + "</div>";
-      });
-      timeSlotsGrid.innerHTML = html;
-
-      timeSlotsGrid.querySelectorAll(".time-slot").forEach((slot) => {
-        slot.addEventListener("click", () => {
-          timeSlotsGrid
-            .querySelectorAll(".time-slot")
-            .forEach((s) => s.classList.remove("selected"));
-          slot.classList.add("selected");
-          selectedTime = slot.dataset.time;
-          if (inputTime) inputTime.value = selectedTime;
+      // Fetch booked times, then render
+      fetchBookedTimes(inputDate?.value || "").then((booked) => {
+        let html = "";
+        timeSlots.forEach((slot) => {
+          const isBooked = booked.includes(slot);
+          html +=
+            '<div class="time-slot' +
+            (isBooked ? " booked" : "") +
+            '" data-time="' +
+            slot +
+            '">' +
+            slot +
+            "</div>";
         });
+        timeSlotsGrid.innerHTML = html;
+
+        timeSlotsGrid
+          .querySelectorAll(".time-slot:not(.booked)")
+          .forEach((slot) => {
+            slot.addEventListener("click", () => {
+              timeSlotsGrid
+                .querySelectorAll(".time-slot")
+                .forEach((s) => s.classList.remove("selected"));
+              slot.classList.add("selected");
+              selectedTime = slot.dataset.time;
+              if (inputTime) inputTime.value = selectedTime;
+            });
+          });
       });
+    }
+
+    /**
+     * Fetch booked time slots for a date via AJAX.
+     * Returns an array of time strings, or empty array on failure.
+     */
+    async function fetchBookedTimes(date) {
+      if (!date || !window.ellievatedBooking) return [];
+      try {
+        const body = new FormData();
+        body.append("action", "ellievated_check_availability");
+        body.append("nonce", window.ellievatedBooking.nonce);
+        body.append("date", date);
+
+        const res = await fetch(window.ellievatedBooking.ajaxUrl, {
+          method: "POST",
+          body,
+        });
+        const json = await res.json();
+        return json.success ? json.data.booked : [];
+      } catch {
+        return [];
+      }
     }
 
     // ── Summary ──

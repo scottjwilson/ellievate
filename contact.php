@@ -226,8 +226,8 @@ get_header();
     color: var(--sage-deep); margin-bottom: 1.25rem; text-align: center;
 }
 .service-picker-grid {
-    display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 1rem;
+    display: grid; grid-template-columns: 1fr;
+    gap: 1rem; max-width: 540px; margin: 0 auto;
 }
 .service-select-card {
     display: flex; align-items: center; gap: 1rem;
@@ -407,8 +407,9 @@ get_header();
 /* Step Navigation */
 .step-nav {
     display: flex; align-items: center; justify-content: space-between;
-    margin-top: 2rem; max-width: 820px; margin-left: auto; margin-right: auto;
+    margin-top: 2rem; max-width: 540px; margin-left: auto; margin-right: auto;
 }
+.step-nav:not(:has(.step-back)) .step-next { width: 100%; }
 .step-back {
     display: inline-flex; align-items: center; gap: 0.4rem;
     font-size: 12px; font-weight: 500; text-transform: uppercase;

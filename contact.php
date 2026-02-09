@@ -498,6 +498,7 @@ get_header();
 .faq-item.is-open .faq-answer { display: block; }
 </style>
 
+<?php if (!$booking_success && !$booking_cancelled_by_stripe): ?>
 <!-- Hero -->
 <section class="book-hero">
     <div class="container">
@@ -508,6 +509,7 @@ get_header();
         </div>
     </div>
 </section>
+<?php endif; ?>
 
 <?php if ($booking_cancelled_by_stripe): ?>
 

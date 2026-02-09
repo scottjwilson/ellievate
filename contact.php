@@ -458,9 +458,19 @@ get_header(); ?>
                         <label for="service">Service Interested In</label>
                         <select id="service" name="service">
                             <option value="">Select a service...</option>
-                            <option value="custom-facial">Custom Facial</option>
-                            <option value="brow-wax">Brow Wax & Shape</option>
-                            <option value="brazilian-wax">Brazilian Wax</option>
+                            <?php
+                            $services = ellievated_get_services();
+                            if ($services->have_posts()):
+                                while ($services->have_posts()):
+                                    $services->the_post(); ?>
+                                <option value="<?php echo esc_attr(
+                                    get_post_field("post_name"),
+                                ); ?>"><?php the_title(); ?></option>
+                            <?php
+                                endwhile;
+                                wp_reset_postdata();
+                            endif;
+                            ?>
                             <option value="other">Other / General Question</option>
                         </select>
                     </div>

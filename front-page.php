@@ -54,42 +54,45 @@ get_header(); ?>
             <p class="section-subtitle">Each treatment is tailored to your unique skin. Relax, unwind, and let Ellie take care of the rest.</p>
         </div>
         <div class="services-grid reveal-stagger">
+            <?php
+            $services = ellievated_get_services(3);
+            if ($services->have_posts()):
+                while ($services->have_posts()):
+
+                    $services->the_post();
+                    $product = wc_get_product(get_the_ID());
+                    $duration = get_post_meta(
+                        get_the_ID(),
+                        "_service_duration",
+                        true,
+                    );
+                    $icon = get_post_meta(get_the_ID(), "_service_icon", true);
+                    ?>
             <div class="service-card">
-                <div class="service-icon">&#10047;</div>
-                <h3 class="service-name">Custom Facial</h3>
-                <p class="service-duration">60 minutes</p>
-                <p class="service-desc">A fully customized treatment featuring deep cleansing, exfoliation, extractions, and a nourishing mask — tailored to your skin's needs.</p>
+                <?php if ($icon): ?>
+                    <div class="service-icon"><?php echo $icon; ?></div>
+                <?php endif; ?>
+                <h3 class="service-name"><?php the_title(); ?></h3>
+                <?php if ($duration): ?>
+                    <p class="service-duration"><?php echo esc_html(
+                        $duration,
+                    ); ?></p>
+                <?php endif; ?>
+                <p class="service-desc"><?php echo get_the_excerpt(); ?></p>
                 <div class="service-footer">
-                    <div class="service-price">$85 <span>/ session</span></div>
+                    <div class="service-price">$<?php echo esc_html(
+                        $product->get_price(),
+                    ); ?> <span>/ session</span></div>
                     <a href="<?php echo esc_url(
                         home_url("/contact"),
                     ); ?>" class="btn btn-primary service-book">Book</a>
                 </div>
             </div>
-            <div class="service-card">
-                <div class="service-icon">&#10043;</div>
-                <h3 class="service-name">Brow Wax &amp; Shape</h3>
-                <p class="service-duration">15 minutes</p>
-                <p class="service-desc">Precision waxing and shaping to frame your face beautifully. Includes a soothing aftercare balm to calm the skin.</p>
-                <div class="service-footer">
-                    <div class="service-price">$25 <span>/ session</span></div>
-                    <a href="<?php echo esc_url(
-                        home_url("/contact"),
-                    ); ?>" class="btn btn-primary service-book">Book</a>
-                </div>
-            </div>
-            <div class="service-card">
-                <div class="service-icon">&#10023;</div>
-                <h3 class="service-name">Brazilian Wax</h3>
-                <p class="service-duration">30 minutes</p>
-                <p class="service-desc">Smooth, long-lasting results using gentle hard wax. Designed for comfort with minimal irritation and maximum confidence.</p>
-                <div class="service-footer">
-                    <div class="service-price">$65 <span>/ session</span></div>
-                    <a href="<?php echo esc_url(
-                        home_url("/contact"),
-                    ); ?>" class="btn btn-primary service-book">Book</a>
-                </div>
-            </div>
+            <?php
+                endwhile;
+                wp_reset_postdata();
+            endif;
+            ?>
         </div>
     </div>
 </section>

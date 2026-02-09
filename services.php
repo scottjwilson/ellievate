@@ -160,84 +160,83 @@ get_header(); ?>
 <!-- Service Details -->
 <section class="service-details">
     <div class="container">
-        <!-- Custom Facial -->
-        <div class="service-detail-block">
-            <div class="sd-visual reveal">
-                <div class="sd-visual-frame">
-                    <div class="sd-gradient sd-gradient-1"></div>
-                    <div class="sd-inner"><div class="sd-icon-text">&#10047;</div></div>
-                </div>
-            </div>
-            <div class="sd-content reveal">
-                <p class="section-label">Facial Treatment</p>
-                <h2 class="section-title">Custom Facial</h2>
-                <div class="sd-price">$85 <span>/ session</span></div>
-                <p class="sd-duration">60 minutes</p>
-                <p class="sd-text">A fully customized facial experience designed around your skin's unique needs. Using premium products and expert techniques, we'll cleanse, exfoliate, extract, and nourish your skin to reveal a healthy, radiant glow.</p>
-                <div class="sd-features">
-                    <div class="sd-feature"><span class="sd-feature-dot"></span> Deep cleansing and gentle exfoliation</div>
-                    <div class="sd-feature"><span class="sd-feature-dot"></span> Customized treatment mask</div>
-                    <div class="sd-feature"><span class="sd-feature-dot"></span> Facial massage for circulation</div>
-                    <div class="sd-feature"><span class="sd-feature-dot"></span> LED light therapy (when applicable)</div>
-                    <div class="sd-feature"><span class="sd-feature-dot"></span> Personalized skincare recommendations</div>
-                </div>
-                <a href="<?php echo esc_url(
-                    home_url("/contact"),
-                ); ?>" class="btn btn-primary">Book Now</a>
-            </div>
-        </div>
+        <?php
+        $services = ellievated_get_services();
+        if ($services->have_posts()):
+            $index = 0;
+            while ($services->have_posts()):
 
-        <!-- Brow Wax -->
+                $services->the_post();
+                $index++;
+                $product = wc_get_product(get_the_ID());
+                $duration = get_post_meta(
+                    get_the_ID(),
+                    "_service_duration",
+                    true,
+                );
+                $icon = get_post_meta(get_the_ID(), "_service_icon", true);
+                $features = get_post_meta(
+                    get_the_ID(),
+                    "_service_features",
+                    true,
+                );
+                $cats = get_the_terms(get_the_ID(), "product_cat");
+                $cat_name = $cats && !is_wp_error($cats) ? $cats[0]->name : "";
+                $gradient = "sd-gradient-" . ((($index - 1) % 3) + 1);
+                ?>
         <div class="service-detail-block">
             <div class="sd-visual reveal">
                 <div class="sd-visual-frame">
-                    <div class="sd-gradient sd-gradient-2"></div>
-                    <div class="sd-inner"><div class="sd-icon-text">&#10043;</div></div>
+                    <div class="sd-gradient <?php echo esc_attr(
+                        $gradient,
+                    ); ?>"></div>
+                    <div class="sd-inner">
+                        <?php if ($icon): ?>
+                            <div class="sd-icon-text"><?php echo $icon; ?></div>
+                        <?php endif; ?>
+                    </div>
                 </div>
             </div>
             <div class="sd-content reveal">
-                <p class="section-label">Waxing</p>
-                <h2 class="section-title">Brow Wax &amp; Shape</h2>
-                <div class="sd-price">$25 <span>/ session</span></div>
-                <p class="sd-duration">15 minutes</p>
-                <p class="sd-text">Perfectly shaped brows can transform your entire look. Precision waxing and shaping to frame your face beautifully, with a soothing aftercare balm to calm the skin.</p>
-                <div class="sd-features">
-                    <div class="sd-feature"><span class="sd-feature-dot"></span> Custom brow mapping for your face shape</div>
-                    <div class="sd-feature"><span class="sd-feature-dot"></span> Gentle, low-irritation hard wax</div>
-                    <div class="sd-feature"><span class="sd-feature-dot"></span> Precision tweezing for clean finish</div>
-                    <div class="sd-feature"><span class="sd-feature-dot"></span> Soothing aftercare balm included</div>
-                </div>
+                <?php if ($cat_name): ?>
+                    <p class="section-label"><?php echo esc_html(
+                        $cat_name,
+                    ); ?></p>
+                <?php endif; ?>
+                <h2 class="section-title"><?php the_title(); ?></h2>
+                <div class="sd-price">$<?php echo esc_html(
+                    $product->get_price(),
+                ); ?> <span>/ session</span></div>
+                <?php if ($duration): ?>
+                    <p class="sd-duration"><?php echo esc_html(
+                        $duration,
+                    ); ?></p>
+                <?php endif; ?>
+                <p class="sd-text"><?php echo get_the_content(); ?></p>
+                <?php if ($features):
+                    $feature_list = array_filter(
+                        array_map("trim", explode("\n", $features)),
+                    );
+                    if ($feature_list): ?>
+                    <div class="sd-features">
+                        <?php foreach ($feature_list as $feature): ?>
+                            <div class="sd-feature"><span class="sd-feature-dot"></span> <?php echo esc_html(
+                                $feature,
+                            ); ?></div>
+                        <?php endforeach; ?>
+                    </div>
+                    <?php endif;
+                endif; ?>
                 <a href="<?php echo esc_url(
                     home_url("/contact"),
                 ); ?>" class="btn btn-primary">Book Now</a>
             </div>
         </div>
-
-        <!-- Brazilian Wax -->
-        <div class="service-detail-block">
-            <div class="sd-visual reveal">
-                <div class="sd-visual-frame">
-                    <div class="sd-gradient sd-gradient-3"></div>
-                    <div class="sd-inner"><div class="sd-icon-text">&#10023;</div></div>
-                </div>
-            </div>
-            <div class="sd-content reveal">
-                <p class="section-label">Waxing</p>
-                <h2 class="section-title">Brazilian Wax</h2>
-                <div class="sd-price">$65 <span>/ session</span></div>
-                <p class="sd-duration">30 minutes</p>
-                <p class="sd-text">Smooth, long-lasting results using gentle hard wax. Designed for comfort with minimal irritation. Your comfort is our top priority — we'll make sure you feel completely at ease.</p>
-                <div class="sd-features">
-                    <div class="sd-feature"><span class="sd-feature-dot"></span> Premium hard wax for sensitive areas</div>
-                    <div class="sd-feature"><span class="sd-feature-dot"></span> Comfortable, professional environment</div>
-                    <div class="sd-feature"><span class="sd-feature-dot"></span> Pre and post-wax skin care included</div>
-                    <div class="sd-feature"><span class="sd-feature-dot"></span> Aftercare instructions provided</div>
-                </div>
-                <a href="<?php echo esc_url(
-                    home_url("/contact"),
-                ); ?>" class="btn btn-primary">Book Now</a>
-            </div>
-        </div>
+        <?php
+            endwhile;
+            wp_reset_postdata();
+        endif;
+        ?>
     </div>
 </section>
 

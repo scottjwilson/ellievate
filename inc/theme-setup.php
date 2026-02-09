@@ -336,3 +336,8 @@ add_action(
  * WooCommerce: Disable sidebar on shop pages
  */
 remove_action("woocommerce_sidebar", "woocommerce_get_sidebar", 10);
+
+/**
+ * WooCommerce: Remove default shop page title
+ */
+add_filter("woocommerce_show_page_title", "__return_false");

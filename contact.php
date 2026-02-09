@@ -95,10 +95,9 @@ if (
             ];
 
             if (wp_mail($to, $subject, $body, $headers)) {
-                $booking_success = true;
-
                 // Save booking to database
-                ellievated_save_booking([
+                $deposit = ellievated_get_deposit_amount();
+                $booking_id = ellievated_save_booking([
                     "service_slug" => $service,
                     "service_name" => $service_name,
                     "booking_date" => $pref_date,
@@ -108,13 +107,50 @@ if (
                     "email" => $email,
                     "phone" => $phone,
                     "message" => $message,
+                    "deposit_amount" => $deposit,
                 ]);
+
+                // Redirect to Stripe Checkout if configured
+                if ($booking_id && ellievated_stripe_is_configured()) {
+                    $checkout_url = ellievated_create_checkout_session(
+                        $booking_id,
+                        [
+                            "service_name" => $service_name,
+                            "email" => $email,
+                        ],
+                    );
+                    if ($checkout_url) {
+                        wp_redirect($checkout_url);
+                        exit();
+                    }
+                }
+
+                // No Stripe or session failed — show success without payment
+                $booking_success = true;
             } else {
                 $booking_error =
                     "Something went wrong sending your request. Please try calling or emailing us directly.";
             }
         }
     }
+}
+
+// Handle Stripe return URLs
+$deposit_paid = false;
+$deposit_amount_display = "";
+$booking_cancelled_by_stripe = false;
+
+if (isset($_GET["booking_confirmed"], $_GET["session_id"])) {
+    $session_id = sanitize_text_field($_GET["session_id"]);
+    $verified = ellievated_verify_checkout_session($session_id);
+    if ($verified) {
+        $booking_success = true;
+        $deposit_paid = true;
+        $deposit_amount_display =
+            "$" . number_format($verified->deposit_amount / 100, 2);
+    }
+} elseif (isset($_GET["booking_cancelled"])) {
+    $booking_cancelled_by_stripe = true;
 }
 
 get_header();
@@ -473,7 +509,26 @@ get_header();
     </div>
 </section>
 
-<?php if ($booking_success): ?>
+<?php if ($booking_cancelled_by_stripe): ?>
+
+<!-- Payment cancelled -->
+<section style="padding: var(--section-pad) 0; background: var(--cream);">
+    <div class="container">
+        <div class="book-success reveal">
+            <div class="book-success-icon"><?php echo ellievated_icon(
+                "calendar",
+                28,
+            ); ?></div>
+            <h2>Booking received</h2>
+            <p>Your payment was not completed, but your booking request has been received. We'll follow up by email to confirm your appointment.</p>
+            <a href="<?php echo esc_url(
+                home_url("/"),
+            ); ?>" class="btn-primary">Back to Home</a>
+        </div>
+    </div>
+</section>
+
+<?php elseif ($booking_success): ?>
 
 <!-- Success -->
 <section style="padding: var(--section-pad) 0; background: var(--cream);">
@@ -483,9 +538,17 @@ get_header();
                 "check",
                 28,
             ); ?></div>
-            <h2>Request received!</h2>
-            <p>Thank you for booking with Ellievated Beauty. We'll confirm your appointment within 24 hours.</p>
-            <p>Check your email for a confirmation shortly.</p>
+            <?php if ($deposit_paid): ?>
+                <h2>Booking confirmed!</h2>
+                <p>Your deposit of <?php echo esc_html(
+                    $deposit_amount_display,
+                ); ?> has been paid. Your appointment is confirmed.</p>
+                <p>Check your email for a confirmation shortly.</p>
+            <?php else: ?>
+                <h2>Request received!</h2>
+                <p>Thank you for booking with Ellievated Beauty. We'll confirm your appointment within 24 hours.</p>
+                <p>Check your email for a confirmation shortly.</p>
+            <?php endif; ?>
             <a href="<?php echo esc_url(
                 home_url("/"),
             ); ?>" class="btn-primary">Back to Home</a>

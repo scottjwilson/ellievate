@@ -109,7 +109,7 @@ function ellievated_enqueue_assets(): void
         ELLIEVATED_VERSION,
     );
 
-    if (is_front_page()) {
+    if (is_front_page() || is_singular("product")) {
         wp_enqueue_style(
             "ellievated-front-page",
             get_template_directory_uri() . "/css/front-page.css",
@@ -341,3 +341,18 @@ remove_action("woocommerce_sidebar", "woocommerce_get_sidebar", 10);
  * WooCommerce: Remove default shop page title
  */
 add_filter("woocommerce_show_page_title", "__return_false");
+
+/**
+ * WooCommerce: Remove default add-to-cart on single products
+ * Purchases go through the booking flow instead.
+ */
+remove_action(
+    "woocommerce_single_product_summary",
+    "woocommerce_template_single_add_to_cart",
+    30,
+);
+remove_action(
+    "woocommerce_simple_add_to_cart",
+    "woocommerce_simple_add_to_cart",
+    30,
+);

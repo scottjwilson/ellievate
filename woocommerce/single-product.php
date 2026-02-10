@@ -259,6 +259,38 @@ while (have_posts()):
     line-height: 1.75;
 }
 
+/* Contact Strip */
+.service-contact { padding: var(--section-pad) 0; background: var(--pearl); }
+.contact-strip-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2rem; text-align: center;
+}
+.contact-strip-icon {
+    width: 44px; height: 44px; display: flex; align-items: center;
+    justify-content: center; background: var(--cream); color: var(--olive);
+    border-radius: 50%; margin: 0 auto 0.75rem;
+}
+.contact-strip-label {
+    font-size: 0.7rem; font-weight: 500; text-transform: uppercase;
+    letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 0.25rem;
+}
+.contact-strip-value { font-size: 0.95rem; font-weight: 400; color: var(--ink); }
+.contact-strip-value a {
+    color: var(--olive); text-decoration: none;
+    transition: color 0.3s var(--ease-out);
+}
+.contact-strip-value a:hover { color: var(--forest); }
+
+/* Related Services */
+.related-services {
+    padding: var(--section-pad) 0;
+    background: var(--cream);
+}
+.related-services-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
 /* Back link */
 .service-back {
     display: inline-flex;
@@ -323,9 +355,7 @@ while (have_posts()):
                         home_url("/contact"),
                     ),
                 ); ?>" class="btn-primary">Book This Service</a>
-                <a href="<?php echo esc_url(
-                    home_url("/contact"),
-                ); ?>" class="btn-outline">Ask a Question</a>
+                <a href="#contact" class="btn-outline">Ask a Question</a>
             </div>
         </div>
 
@@ -336,6 +366,34 @@ while (have_posts()):
                         "border-radius: 32px; width: 100%; max-width: 420px; height: auto;",
                 ]); ?>
             <?php
+                // Gradient placeholder with icon
+                // Gradient placeholder with icon
+                // Gradient placeholder with icon
+                // Gradient placeholder with icon
+                // Gradient placeholder with icon
+                // Gradient placeholder with icon
+                // Gradient placeholder with icon
+                // Gradient placeholder with icon
+                // Gradient placeholder with icon
+                // Gradient placeholder with icon
+                // Gradient placeholder with icon
+                // Gradient placeholder with icon
+                // Gradient placeholder with icon
+                // Gradient placeholder with icon
+                // Gradient placeholder with icon
+                // Gradient placeholder with icon
+                // Gradient placeholder with icon
+                // Gradient placeholder with icon
+                // Gradient placeholder with icon
+                // Gradient placeholder with icon
+                // Gradient placeholder with icon
+                // Gradient placeholder with icon
+                // Gradient placeholder with icon
+                // Gradient placeholder with icon
+                // Gradient placeholder with icon
+                // Gradient placeholder with icon
+                // Gradient placeholder with icon
+                // Gradient placeholder with icon
                 // Gradient placeholder with icon
                 // Gradient placeholder with icon
                 // Gradient placeholder with icon
@@ -403,6 +461,108 @@ if ($content || $has_features): ?>
 </section>
 <?php endif;
 ?>
+
+<!-- Related Services -->
+<?php
+$current_id = get_the_ID();
+$related_services = new WP_Query([
+    "post_type" => "product",
+    "posts_per_page" => 3,
+    "post__not_in" => [$current_id],
+    "orderby" => "menu_order",
+    "order" => "ASC",
+    "post_status" => "publish",
+]);
+
+if ($related_services->have_posts()): ?>
+<section class="related-services">
+    <div class="container">
+        <div class="related-services-header reveal">
+            <p class="section-label">You might also like</p>
+            <h2 class="section-title">Other <em class="swash">services</em></h2>
+        </div>
+        <div class="services-grid reveal-stagger">
+            <?php
+            while ($related_services->have_posts()):
+
+                $related_services->the_post();
+                $rel_product = wc_get_product(get_the_ID());
+                $rel_duration = get_post_meta(
+                    get_the_ID(),
+                    "_service_duration",
+                    true,
+                );
+                $rel_icon = get_post_meta(get_the_ID(), "_service_icon", true);
+                ?>
+            <div class="service-card">
+                <?php if ($rel_icon): ?>
+                    <div class="service-icon"><?php echo $rel_icon; ?></div>
+                <?php endif; ?>
+                <h3 class="service-name"><?php the_title(); ?></h3>
+                <?php if ($rel_duration): ?>
+                    <p class="service-duration"><?php echo esc_html(
+                        $rel_duration,
+                    ); ?></p>
+                <?php endif; ?>
+                <p class="service-desc"><?php echo get_the_excerpt(); ?></p>
+                <div class="service-footer">
+                    <div class="service-price">$<?php echo esc_html(
+                        $rel_product->get_price(),
+                    ); ?> <span>/ session</span></div>
+                    <a href="<?php the_permalink(); ?>" class="btn btn-primary service-book">View</a>
+                </div>
+            </div>
+            <?php
+            endwhile;
+            wp_reset_postdata();
+            ?>
+        </div>
+    </div>
+</section>
+<?php endif;
+?>
+
+<!-- Contact -->
+<section class="service-contact" id="contact">
+    <div class="container">
+        <div class="contact-strip-grid reveal-stagger">
+            <div class="contact-strip-item">
+                <div class="contact-strip-icon"><?php echo ellievated_icon(
+                    "mail",
+                    20,
+                ); ?></div>
+                <p class="contact-strip-label">Email</p>
+                <p class="contact-strip-value"><a href="mailto:hello@ellievatedbeauty.com?subject=Question about <?php echo urlencode(
+                    get_the_title(),
+                ); ?>">hello@ellievatedbeauty.com</a></p>
+            </div>
+            <div class="contact-strip-item">
+                <div class="contact-strip-icon"><?php echo ellievated_icon(
+                    "phone",
+                    20,
+                ); ?></div>
+                <p class="contact-strip-label">Phone</p>
+                <p class="contact-strip-value"><a href="tel:+1234567890">(123) 456-7890</a></p>
+            </div>
+            <div class="contact-strip-item">
+                <div class="contact-strip-icon"><?php echo ellievated_icon(
+                    "map-pin",
+                    20,
+                ); ?></div>
+                <p class="contact-strip-label">Location</p>
+                <p class="contact-strip-value">Your City, State</p>
+            </div>
+            <div class="contact-strip-item">
+                <div class="contact-strip-icon"><?php echo ellievated_icon(
+                    "clock",
+                    20,
+                ); ?></div>
+                <p class="contact-strip-label">Hours</p>
+                <p class="contact-strip-value">By appointment only</p>
+            </div>
+        </div>
+    </div>
+</section>
 
 <!-- CTA -->
 <section class="service-cta">

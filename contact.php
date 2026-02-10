@@ -214,11 +214,8 @@ get_header();
 /* ═══ BOOKING STEPS CONTAINER ═══ */
 .booking-steps { background: var(--cream); padding-bottom: var(--section-pad); }
 .booking-step {
-    display: none; max-width: 90%; margin: 0 auto;
+    display: none;
     animation: fadeUp 0.5s var(--ease-out);
-}
-@media (min-width: 768px) {
-    .booking-step { max-width: 820px; }
 }
 .booking-step.step-active { display: block; }
 

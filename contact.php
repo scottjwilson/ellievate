@@ -278,8 +278,8 @@ get_header();
 /* ═══ CONTACT STRIP ═══ */
 .book-contact-strip { padding: var(--section-pad) 0; background: var(--pearl); }
 .contact-strip-grid {
-    display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 2rem; text-align: center;
+    display: flex; flex-wrap: wrap; justify-content: center;
+    gap: 2.5rem; text-align: center;
 }
 .contact-strip-icon {
     width: 44px; height: 44px; display: flex; align-items: center;
@@ -516,7 +516,7 @@ get_header();
                     20,
                 ); ?></div>
                 <p class="contact-strip-label">Phone</p>
-                <p class="contact-strip-value"><a href="tel:+1234567890">(123) 456-7890</a></p>
+                <p class="contact-strip-value"><a href="tel:+16614588040">(661) 458-8040</a></p>
             </div>
             <div class="contact-strip-item">
                 <div class="contact-strip-icon"><?php echo ellievated_icon(
@@ -524,7 +524,7 @@ get_header();
                     20,
                 ); ?></div>
                 <p class="contact-strip-label">Location</p>
-                <p class="contact-strip-value">Your City, State</p>
+                <p class="contact-strip-value">Bakersfield, CA</p>
             </div>
             <div class="contact-strip-item">
                 <div class="contact-strip-icon"><?php echo ellievated_icon(

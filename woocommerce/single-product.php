@@ -497,7 +497,7 @@ if ($related_services->have_posts()): ?>
                     20,
                 ); ?></div>
                 <p class="contact-strip-label">Phone</p>
-                <p class="contact-strip-value"><a href="tel:+1234567890">(123) 456-7890</a></p>
+                <p class="contact-strip-value"><a href="tel:+16614588040">(661) 458-8040</a></p>
             </div>
             <div class="contact-strip-item">
                 <div class="contact-strip-icon"><?php echo ellievated_icon(
@@ -505,7 +505,7 @@ if ($related_services->have_posts()): ?>
                     20,
                 ); ?></div>
                 <p class="contact-strip-label">Location</p>
-                <p class="contact-strip-value">Your City, State</p>
+                <p class="contact-strip-value">Bakersfield, CA</p>
             </div>
             <div class="contact-strip-item">
                 <div class="contact-strip-icon"><?php echo ellievated_icon(

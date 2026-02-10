@@ -118,22 +118,6 @@
       "5:00 PM",
     ];
 
-    // Check for preselected service
-    const preselectedCard = document.querySelector(
-      ".service-select-card.selected",
-    );
-    if (preselectedCard) {
-      selectedService = {
-        slug: preselectedCard.dataset.slug,
-        name: preselectedCard.dataset.name,
-        price: preselectedCard.dataset.price,
-        duration: preselectedCard.dataset.duration,
-        icon: preselectedCard.dataset.icon,
-        productId: preselectedCard.dataset.productId,
-      };
-      goToStep(2);
-    }
-
     // Service card click
     serviceCards.forEach((card) => {
       card.addEventListener("click", () => {
@@ -415,6 +399,22 @@
         date.textContent = selectedDate.toLocaleDateString("en-US", opts);
       }
       if (time) time.textContent = selectedTime || "—";
+    }
+
+    // ── Preselected service (from ?service=slug) ──
+    const preselectedCard = document.querySelector(
+      ".service-select-card.selected",
+    );
+    if (preselectedCard) {
+      selectedService = {
+        slug: preselectedCard.dataset.slug,
+        name: preselectedCard.dataset.name,
+        price: preselectedCard.dataset.price,
+        duration: preselectedCard.dataset.duration,
+        icon: preselectedCard.dataset.icon,
+        productId: preselectedCard.dataset.productId,
+      };
+      goToStep(2);
     }
 
     // ── Proceed to Checkout ──

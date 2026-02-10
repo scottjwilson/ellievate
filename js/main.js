@@ -81,9 +81,6 @@
     const steps = document.querySelectorAll(".booking-step");
     const indicators = document.querySelectorAll(".step-item");
     const serviceCards = document.querySelectorAll(".service-select-card");
-    const inputService = document.getElementById("input-service");
-    const inputDate = document.getElementById("input-date");
-    const inputTime = document.getElementById("input-time");
 
     // State
     let currentStep = 1;
@@ -93,8 +90,10 @@
       price: "",
       duration: "",
       icon: "",
+      productId: "",
     };
     let selectedDate = null;
+    let selectedDateStr = "";
     let selectedTime = "";
     let calDate = new Date();
 
@@ -130,6 +129,7 @@
         price: preselectedCard.dataset.price,
         duration: preselectedCard.dataset.duration,
         icon: preselectedCard.dataset.icon,
+        productId: preselectedCard.dataset.productId,
       };
       goToStep(2);
     }
@@ -145,8 +145,8 @@
           price: card.dataset.price,
           duration: card.dataset.duration,
           icon: card.dataset.icon,
+          productId: card.dataset.productId,
         };
-        if (inputService) inputService.value = selectedService.slug;
       });
     });
 
@@ -183,7 +183,6 @@
         alert("Please select a service.");
         return;
       }
-      if (inputService) inputService.value = selectedService.slug;
       goToStep(2);
     });
 
@@ -322,7 +321,7 @@
               parseInt(parts[1]) - 1,
               parseInt(parts[2]),
             );
-            if (inputDate) inputDate.value = cell.dataset.date;
+            selectedDateStr = cell.dataset.date;
             renderTimeSlots();
           });
         });
@@ -331,13 +330,12 @@
     function renderTimeSlots() {
       if (!timeSlotsSection || !timeSlotsGrid) return;
       selectedTime = "";
-      if (inputTime) inputTime.value = "";
       timeSlotsSection.style.display = "block";
       timeSlotsGrid.innerHTML =
         '<div class="time-slots-loading">Checking availability&hellip;</div>';
 
       // Fetch booked times, then render
-      fetchBookedTimes(inputDate?.value || "").then((booked) => {
+      fetchBookedTimes(selectedDateStr).then((booked) => {
         let html = "";
         timeSlots.forEach((slot) => {
           const isBooked = booked.includes(slot);
@@ -361,7 +359,6 @@
                 .forEach((s) => s.classList.remove("selected"));
               slot.classList.add("selected");
               selectedTime = slot.dataset.time;
-              if (inputTime) inputTime.value = selectedTime;
             });
           });
       });
@@ -419,6 +416,53 @@
       }
       if (time) time.textContent = selectedTime || "—";
     }
+
+    // ── Proceed to Checkout ──
+    const checkoutBtn = document.getElementById("proceedToCheckout");
+    const checkoutError = document.getElementById("checkoutError");
+
+    checkoutBtn?.addEventListener("click", async () => {
+      if (!window.ellievatedBooking) return;
+
+      checkoutBtn.disabled = true;
+      checkoutBtn.textContent = "Processing…";
+      if (checkoutError) checkoutError.style.display = "none";
+
+      try {
+        const body = new FormData();
+        body.append("action", "ellievated_add_to_cart");
+        body.append("nonce", window.ellievatedBooking.nonce);
+        body.append("product_id", selectedService.productId);
+        body.append("booking_date", selectedDateStr);
+        body.append("booking_time", selectedTime);
+
+        const res = await fetch(window.ellievatedBooking.ajaxUrl, {
+          method: "POST",
+          body,
+        });
+        const json = await res.json();
+
+        if (json.success && json.data?.redirect) {
+          window.location.href = json.data.redirect;
+        } else {
+          const msg =
+            json.data?.message || json.data || "Something went wrong.";
+          if (checkoutError) {
+            checkoutError.textContent = msg;
+            checkoutError.style.display = "block";
+          }
+          checkoutBtn.disabled = false;
+          checkoutBtn.textContent = "Proceed to Checkout";
+        }
+      } catch {
+        if (checkoutError) {
+          checkoutError.textContent = "Unable to connect. Please try again.";
+          checkoutError.style.display = "block";
+        }
+        checkoutBtn.disabled = false;
+        checkoutBtn.textContent = "Proceed to Checkout";
+      }
+    });
   }
 
   // ═══ FAQ ACCORDION ═══

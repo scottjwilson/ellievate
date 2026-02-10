@@ -10,148 +10,9 @@
 
 defined("ABSPATH") || exit();
 
-$booking_success = false;
-$booking_error = "";
 $preselected = isset($_GET["service"])
     ? sanitize_text_field($_GET["service"])
     : "";
-
-// Handle form submission
-if (
-    $_SERVER["REQUEST_METHOD"] === "POST" &&
-    isset($_POST["ellievated_booking_nonce"])
-) {
-    if (
-        !wp_verify_nonce(
-            $_POST["ellievated_booking_nonce"],
-            "ellievated_booking_submit",
-        )
-    ) {
-        $booking_error = "Security check failed. Please try again.";
-    } else {
-        $first_name = sanitize_text_field($_POST["first_name"] ?? "");
-        $last_name = sanitize_text_field($_POST["last_name"] ?? "");
-        $email = sanitize_email($_POST["email"] ?? "");
-        $phone = sanitize_text_field($_POST["phone"] ?? "");
-        $service = sanitize_text_field($_POST["service"] ?? "");
-        $pref_date = sanitize_text_field($_POST["preferred_date"] ?? "");
-        $pref_time = sanitize_text_field($_POST["preferred_time"] ?? "");
-        $message = sanitize_textarea_field($_POST["message"] ?? "");
-
-        if (empty($first_name) || empty($email) || empty($service)) {
-            $booking_error =
-                "Please fill in your name, email, and select a service.";
-        } elseif (!is_email($email)) {
-            $booking_error = "Please enter a valid email address.";
-        } else {
-            $service_name = $service;
-            $service_price = "";
-            $service_post = get_page_by_path($service, OBJECT, "product");
-            if ($service_post) {
-                $service_name = $service_post->post_title;
-                $product = wc_get_product($service_post->ID);
-                $service_price = $product ? '$' . $product->get_price() : "";
-            }
-
-            $to = get_option("admin_email");
-            $subject =
-                "New Booking Request: " .
-                $service_name .
-                " — " .
-                $first_name .
-                " " .
-                $last_name;
-
-            $body = "New booking request from your website:\n\n";
-            $body .= "━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n";
-            $body .= "SERVICE: {$service_name}";
-            if (!empty($service_price)) {
-                $body .= " ({$service_price})";
-            }
-            $body .= "\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n";
-            $body .= "Name: {$first_name} {$last_name}\n";
-            $body .= "Email: {$email}\n";
-            if (!empty($phone)) {
-                $body .= "Phone: {$phone}\n";
-            }
-            if (!empty($pref_date)) {
-                $body .= "Preferred Date: {$pref_date}\n";
-            }
-            if (!empty($pref_time)) {
-                $body .= "Preferred Time: {$pref_time}\n";
-            }
-            if (!empty($message)) {
-                $body .= "\nMessage:\n{$message}\n";
-            }
-
-            $headers = [
-                "Reply-To: " .
-                $first_name .
-                " " .
-                $last_name .
-                " <" .
-                $email .
-                ">",
-            ];
-
-            if (wp_mail($to, $subject, $body, $headers)) {
-                // Save booking to database
-                $deposit = ellievated_get_deposit_amount();
-                $booking_id = ellievated_save_booking([
-                    "service_slug" => $service,
-                    "service_name" => $service_name,
-                    "booking_date" => $pref_date,
-                    "booking_time" => $pref_time,
-                    "first_name" => $first_name,
-                    "last_name" => $last_name,
-                    "email" => $email,
-                    "phone" => $phone,
-                    "message" => $message,
-                    "deposit_amount" => $deposit,
-                ]);
-
-                // Redirect to Stripe Checkout if configured
-                if ($booking_id && ellievated_stripe_is_configured()) {
-                    $checkout_url = ellievated_create_checkout_session(
-                        $booking_id,
-                        [
-                            "service_name" => $service_name,
-                            "email" => $email,
-                        ],
-                    );
-                    if ($checkout_url) {
-                        wp_redirect($checkout_url);
-                        exit();
-                    }
-                }
-
-                // No Stripe or session failed — show success without payment
-                $booking_success = true;
-            } else {
-                $booking_error =
-                    "Something went wrong sending your request. Please try calling or emailing us directly.";
-            }
-        }
-    }
-}
-
-// Handle Stripe return URLs
-$deposit_paid = false;
-$deposit_amount_display = "";
-$booking_cancelled_by_stripe = false;
-
-if (isset($_GET["booking_confirmed"], $_GET["session_id"])) {
-    $session_id = sanitize_text_field($_GET["session_id"]);
-    $verified = ellievated_verify_checkout_session($session_id);
-    if ($verified) {
-        $booking_success = true;
-        $deposit_paid = true;
-        $deposit_amount_display =
-            "$" . number_format($verified->deposit_amount / 100, 2);
-    }
-} elseif (isset($_GET["booking_cancelled"])) {
-    $booking_cancelled_by_stripe = true;
-}
 
 get_header();
 ?>
@@ -321,51 +182,9 @@ get_header();
     font-size: 14px;
 }
 
-/* ═══ STEP 3: DETAILS + SUMMARY ═══ */
-.details-grid {
-    display: grid; gap: 2.5rem;
-}
-@media (min-width: 768px) {
-    .details-grid { grid-template-columns: 1.2fr 1fr; }
-}
-.book-form-wrapper {
-    background: var(--pearl); padding: clamp(1.5rem, 3vw, 2.5rem);
-}
-.book-form-title {
-    font-family: var(--font-display); font-size: 1.5rem;
-    font-weight: 400; color: var(--ink); margin-bottom: 0.5rem;
-}
-.book-form-subtitle {
-    font-size: 13px; color: var(--text-muted); margin-bottom: 1.5rem; line-height: 1.6;
-}
-.book-form {
-    display: flex; flex-direction: column; gap: 1.25rem;
-}
-.form-row { display: grid; gap: 1.25rem; }
-@media (min-width: 640px) {
-    .form-row { grid-template-columns: repeat(2, 1fr); }
-}
-.form-group { display: flex; flex-direction: column; gap: 0.5rem; }
-.form-group label {
-    font-size: 0.7rem; font-weight: 500; text-transform: uppercase;
-    letter-spacing: 0.1em; color: var(--ink);
-}
-.form-group input,
-.form-group textarea {
-    padding: 0.875rem 1rem; background: var(--cream);
-    border: 1px solid var(--border); font-family: var(--font-body);
-    font-size: 0.95rem; font-weight: 300; color: var(--ink);
-    transition: border-color 0.3s var(--ease-out);
-}
-.form-group input:focus,
-.form-group textarea:focus { outline: none; border-color: var(--sage); }
-.form-group input::placeholder,
-.form-group textarea::placeholder { color: var(--sage); }
-.form-group textarea { resize: vertical; min-height: 90px; }
-
-/* Summary Card */
+/* ═══ STEP 3: REVIEW + SUMMARY ═══ */
 .booking-summary {
-    background: var(--pearl); padding: 2rem; position: sticky; top: 6rem;
+    background: var(--pearl); padding: 2rem;
 }
 .summary-title {
     font-size: 11px; font-weight: 600; text-transform: uppercase;
@@ -402,6 +221,16 @@ get_header();
 .summary-total-value {
     font-family: var(--font-display); font-size: 1.5rem;
     font-weight: 400; color: var(--ink);
+}
+
+.booking-summary-centered {
+    max-width: 480px; margin: 0 auto;
+}
+.book-checkout-error {
+    max-width: 480px; margin: 1rem auto 0;
+    padding: 0.875rem 1.25rem; background: #fef2f2;
+    border: 1px solid #fca5a5; color: #991b1b;
+    font-size: 14px; text-align: center;
 }
 
 /* Step Navigation */
@@ -499,7 +328,6 @@ get_header();
 .faq-item.is-open .faq-answer { display: block; }
 </style>
 
-<?php if (!$booking_success && !$booking_cancelled_by_stripe): ?>
 <!-- Hero -->
 <section class="book-hero">
     <div class="container">
@@ -509,56 +337,6 @@ get_header();
         </div>
     </div>
 </section>
-<?php endif; ?>
-
-<?php if ($booking_cancelled_by_stripe): ?>
-
-<!-- Payment cancelled -->
-<section style="padding: var(--section-pad) 0; background: var(--cream);">
-    <div class="container">
-        <div class="book-success reveal">
-            <div class="book-success-icon"><?php echo ellievated_icon(
-                "calendar",
-                28,
-            ); ?></div>
-            <h2>Booking received</h2>
-            <p>Your payment was not completed, but your booking request has been received. We'll follow up by email to confirm your appointment.</p>
-            <a href="<?php echo esc_url(
-                home_url("/"),
-            ); ?>" class="btn-primary">Back to Home</a>
-        </div>
-    </div>
-</section>
-
-<?php elseif ($booking_success): ?>
-
-<!-- Success -->
-<section style="padding: var(--section-pad) 0; background: var(--cream);">
-    <div class="container">
-        <div class="book-success reveal">
-            <div class="book-success-icon"><?php echo ellievated_icon(
-                "check",
-                28,
-            ); ?></div>
-            <?php if ($deposit_paid): ?>
-                <h2>Booking confirmed!</h2>
-                <p>Your deposit of <?php echo esc_html(
-                    $deposit_amount_display,
-                ); ?> has been paid. Your appointment is confirmed.</p>
-                <p>Check your email for a confirmation shortly.</p>
-            <?php else: ?>
-                <h2>Request received!</h2>
-                <p>Thank you for booking with Ellievated Beauty. We'll confirm your appointment within 24 hours.</p>
-                <p>Check your email for a confirmation shortly.</p>
-            <?php endif; ?>
-            <a href="<?php echo esc_url(
-                home_url("/"),
-            ); ?>" class="btn-primary">Back to Home</a>
-        </div>
-    </div>
-</section>
-
-<?php else: ?>
 
 <!-- Step Indicator -->
 <div class="step-indicator" id="stepIndicator">
@@ -574,31 +352,14 @@ get_header();
     <div class="step-line"></div>
     <div class="step-item" data-step="3">
         <span class="step-num">3</span>
-        <span class="step-label">Details</span>
+        <span class="step-label">Review</span>
     </div>
 </div>
 
 <!-- Booking Steps -->
 <section class="booking-steps">
     <div class="container">
-        <form class="book-form" method="post" action="<?php echo esc_url(
-            get_permalink(),
-        ); ?>" id="bookingForm">
-            <?php wp_nonce_field(
-                "ellievated_booking_submit",
-                "ellievated_booking_nonce",
-            ); ?>
-            <input type="hidden" name="service" id="input-service" value="<?php echo esc_attr(
-                $preselected,
-            ); ?>">
-            <input type="hidden" name="preferred_date" id="input-date" value="">
-            <input type="hidden" name="preferred_time" id="input-time" value="">
-
-            <?php if ($booking_error): ?>
-                <div class="book-error"><?php echo esc_html(
-                    $booking_error,
-                ); ?></div>
-            <?php endif; ?>
+        <div id="bookingForm">
 
             <!-- STEP 1: Choose Service -->
             <div class="booking-step step-active" data-step="1" id="step1">
@@ -627,6 +388,9 @@ get_header();
                             ?>
                         <div class="service-select-card<?php echo $selected; ?>"
                              data-slug="<?php echo esc_attr($slug); ?>"
+                             data-product-id="<?php echo esc_attr(
+                                 get_the_ID(),
+                             ); ?>"
                              data-name="<?php echo esc_attr(
                                  get_the_title(),
                              ); ?>"
@@ -695,78 +459,44 @@ get_header();
                 </div>
             </div>
 
-            <!-- STEP 3: Details -->
+            <!-- STEP 3: Review & Checkout -->
             <div class="booking-step" data-step="3" id="step3">
-                <div class="details-grid">
-                    <div class="book-form-wrapper">
-                        <h2 class="book-form-title">Your details</h2>
-                        <p class="book-form-subtitle">Almost there! Fill in your info and we'll confirm within 24 hours.</p>
-
-                        <div style="display:flex; flex-direction:column; gap:1.25rem;">
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="first-name">First Name *</label>
-                                    <input type="text" id="first-name" name="first_name" placeholder="Your first name" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="last-name">Last Name</label>
-                                    <input type="text" id="last-name" name="last_name" placeholder="Your last name">
-                                </div>
-                            </div>
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="email">Email *</label>
-                                    <input type="email" id="email" name="email" placeholder="your@email.com" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="phone">Phone</label>
-                                    <input type="tel" id="phone" name="phone" placeholder="(123) 456-7890">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="message">Notes <span style="font-weight:300; text-transform:none; letter-spacing:0; font-size:12px; color:var(--text-muted);">(optional)</span></label>
-                                <textarea id="message" name="message" placeholder="Any skin concerns, allergies, or preferences..."></textarea>
-                            </div>
+                <div class="booking-summary booking-summary-centered" id="bookingSummary">
+                    <p class="summary-title">Booking Summary</p>
+                    <div class="summary-service">
+                        <span class="summary-service-icon" id="summaryIcon"></span>
+                        <div>
+                            <div class="summary-service-name" id="summaryName">—</div>
+                            <div class="summary-service-price" id="summaryDuration">—</div>
                         </div>
                     </div>
-
-                    <div class="booking-summary" id="bookingSummary">
-                        <p class="summary-title">Booking Summary</p>
-                        <div class="summary-service">
-                            <span class="summary-service-icon" id="summaryIcon"></span>
-                            <div>
-                                <div class="summary-service-name" id="summaryName">—</div>
-                                <div class="summary-service-price" id="summaryDuration">—</div>
-                            </div>
-                        </div>
-                        <div class="summary-row">
-                            <span class="summary-row-label">Date</span>
-                            <span class="summary-row-value" id="summaryDate">—</span>
-                        </div>
-                        <div class="summary-row">
-                            <span class="summary-row-label">Time</span>
-                            <span class="summary-row-value" id="summaryTime">—</span>
-                        </div>
-                        <div class="summary-total">
-                            <span class="summary-total-label">Total</span>
-                            <span class="summary-total-value" id="summaryPrice">—</span>
-                        </div>
+                    <div class="summary-row">
+                        <span class="summary-row-label">Date</span>
+                        <span class="summary-row-value" id="summaryDate">—</span>
+                    </div>
+                    <div class="summary-row">
+                        <span class="summary-row-label">Time</span>
+                        <span class="summary-row-value" id="summaryTime">—</span>
+                    </div>
+                    <div class="summary-total">
+                        <span class="summary-total-label">Total</span>
+                        <span class="summary-total-value" id="summaryPrice">—</span>
                     </div>
                 </div>
+
+                <div class="book-checkout-error" id="checkoutError" style="display:none;"></div>
 
                 <div class="step-nav">
                     <button type="button" class="step-back" id="backToStep2">
                         <?php echo ellievated_icon("arrow-right", 14); ?>
                         Back
                     </button>
-                    <button type="submit" class="btn-primary step-next">Request Appointment</button>
+                    <button type="button" class="btn-primary step-next" id="proceedToCheckout">Proceed to Checkout</button>
                 </div>
             </div>
-        </form>
+        </div>
     </div>
 </section>
-
-<?php endif; ?>
 
 <!-- Contact Info -->
 <section class="book-contact-strip">

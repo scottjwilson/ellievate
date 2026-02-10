@@ -361,61 +361,16 @@ while (have_posts()):
 
         <div class="service-hero-visual reveal">
             <?php if (has_post_thumbnail()): ?>
-                <?php the_post_thumbnail("ellievated-service", [
+                <?php the_post_thumbnail("large", [
                     "style" =>
                         "border-radius: 32px; width: 100%; max-width: 420px; height: auto;",
                 ]); ?>
-            <?php
-                // Gradient placeholder with icon
-                // Gradient placeholder with icon
-                // Gradient placeholder with icon
-                // Gradient placeholder with icon
-                // Gradient placeholder with icon
-                // Gradient placeholder with icon
-                // Gradient placeholder with icon
-                // Gradient placeholder with icon
-                // Gradient placeholder with icon
-                // Gradient placeholder with icon
-                // Gradient placeholder with icon
-                // Gradient placeholder with icon
-                // Gradient placeholder with icon
-                // Gradient placeholder with icon
-                // Gradient placeholder with icon
-                // Gradient placeholder with icon
-                // Gradient placeholder with icon
-                // Gradient placeholder with icon
-                // Gradient placeholder with icon
-                // Gradient placeholder with icon
-                // Gradient placeholder with icon
-                // Gradient placeholder with icon
-                // Gradient placeholder with icon
-                // Gradient placeholder with icon
-                // Gradient placeholder with icon
-                // Gradient placeholder with icon
-                // Gradient placeholder with icon
-                // Gradient placeholder with icon
-                // Gradient placeholder with icon
-                // Gradient placeholder with icon
-                // Gradient placeholder with icon
-                // Gradient placeholder with icon
-                else:
-                $gradients = [
-                    "linear-gradient(160deg, var(--sage-light) 0%, var(--sage) 50%, var(--olive) 100%)",
-                    "linear-gradient(160deg, #e4e8dc 0%, #ced5c2 50%, var(--sage) 100%)",
-                    "linear-gradient(160deg, var(--olive) 0%, var(--forest) 50%, var(--black) 100%)",
-                ];
-                $gradient =
-                    $gradients[($product->get_menu_order() - 1) % 3] ??
-                    $gradients[0];
-                ?>
-                <div class="service-visual-frame">
-                    <div class="service-visual-gradient" style="background: <?php echo $gradient; ?>;"></div>
-                    <div class="service-visual-inner">
-                        <?php if ($icon): ?>
-                            <div class="service-visual-icon"><?php echo $icon; ?></div>
-                        <?php endif; ?>
-                    </div>
-                </div>
+            <?php else: ?>
+                <img src="<?php echo esc_url(
+                    get_template_directory_uri() . "/images/f.jpg",
+                ); ?>"
+                     alt="<?php echo esc_attr(get_the_title()); ?>"
+                     style="border-radius: 32px; width: 100%; max-width: 420px; height: auto;">
             <?php endif; ?>
         </div>
     </div>

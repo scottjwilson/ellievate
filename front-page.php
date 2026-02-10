@@ -24,14 +24,9 @@ get_header(); ?>
         </div>
         <div class="hero-visual">
             <div class="hero-image-frame">
-                <!-- Replace with actual photo: <img src="hero.jpg" alt="Ellievated Beauty Studio"> -->
-                <div class="palette-dots">
-                    <div class="palette-dot"></div>
-                    <div class="palette-dot"></div>
-                    <div class="palette-dot"></div>
-                    <div class="palette-dot"></div>
-                    <div class="palette-dot"></div>
-                </div>
+                <img src="<?php echo esc_url(
+                    get_template_directory_uri() . "/images/d.jpg",
+                ); ?>" alt="Ellievated Beauty — Esthetician at work">
             </div>
             <div class="hero-badge">
                 <div class="hero-badge-icon">&#10022;</div>

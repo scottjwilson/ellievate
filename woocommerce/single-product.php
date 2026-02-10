@@ -262,8 +262,11 @@ while (have_posts()):
 /* Contact Strip */
 .service-contact { padding: var(--section-pad) 0; background: var(--pearl); }
 .contact-strip-grid {
-    display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 2rem; text-align: center;
+    display: flex; flex-wrap: wrap; justify-content: center;
+    gap: 2.5rem 3rem; text-align: center;
+}
+.contact-strip-item {
+    min-width: 180px;
 }
 .contact-strip-icon {
     width: 44px; height: 44px; display: flex; align-items: center;

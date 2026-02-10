@@ -279,7 +279,10 @@ get_header();
 .book-contact-strip { padding: var(--section-pad) 0; background: var(--pearl); }
 .contact-strip-grid {
     display: flex; flex-wrap: wrap; justify-content: center;
-    gap: 2.5rem; text-align: center;
+    gap: 2.5rem 3rem; text-align: center;
+}
+.contact-strip-item {
+    min-width: 180px;
 }
 .contact-strip-icon {
     width: 44px; height: 44px; display: flex; align-items: center;

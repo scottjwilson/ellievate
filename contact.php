@@ -277,13 +277,23 @@ get_header();
 
 /* ═══ CONTACT STRIP ═══ */
 .book-contact-strip { padding: var(--section-pad) 0; background: var(--pearl); }
-.contact-strip-grid {
-    display: grid; grid-template-columns: repeat(4, 1fr);
-    gap: 2rem; text-align: center;
+.book-contact-strip .container {
+    max-width: 900px !important;
+    margin: 0 auto !important;
+}
+.book-contact-strip .contact-strip-grid {
+    display: grid !important;
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 2rem !important;
+    text-align: center !important;
+    width: 100% !important;
 }
 @media (max-width: 600px) {
-    .contact-strip-grid { grid-template-columns: repeat(2, 1fr); }
+    .book-contact-strip .contact-strip-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+    }
 }
+.contact-strip-item { text-align: center; }
 .contact-strip-icon {
     width: 44px; height: 44px; display: flex; align-items: center;
     justify-content: center; background: var(--cream); color: var(--olive);

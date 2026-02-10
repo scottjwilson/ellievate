@@ -7,7 +7,7 @@
 
 defined("ABSPATH") || exit();
 
-define("ELLIEVATED_VERSION", "1.0.0");
+define("ELLIEVATED_VERSION", "1.1.0");
 define("ELLIEVATED_DIR", get_template_directory());
 define("ELLIEVATED_URI", get_template_directory_uri());
 

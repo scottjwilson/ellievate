@@ -95,9 +95,9 @@ get_header(); ?>
     <div class="container">
         <div class="about-visual reveal">
             <div class="about-image">
-                <div class="about-image-inner">
-                    <div class="about-image-text">E</div>
-                </div>
+                <img src="<?php echo esc_url(
+                    get_template_directory_uri() . "/images/headshot.jpeg",
+                ); ?>" alt="Ellie — Licensed Esthetician">
             </div>
             <div class="about-stat-float">
                 <div class="about-stat-number">8+</div>

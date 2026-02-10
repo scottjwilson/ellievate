@@ -25,9 +25,6 @@
                 <li><a href="<?php echo esc_url(
                     home_url("/#reviews"),
                 ); ?>">Reviews</a></li>
-                <li><a href="<?php echo esc_url(
-                    home_url("/shop"),
-                ); ?>">Shop</a></li>
                 <li class="nav-cta"><a href="<?php echo esc_url(
                     home_url("/contact"),
                 ); ?>" class="btn btn-primary" style="font-size:12px; padding:0.6rem 1.5rem;">Book Now</a></li>

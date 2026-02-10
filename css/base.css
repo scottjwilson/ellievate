@@ -340,9 +340,9 @@ button {
 /* Checkout & Cart page — compact title area */
 .woocommerce-checkout section:first-of-type,
 .woocommerce-cart section:first-of-type {
-    padding: 7rem 0 1rem !important;
+    padding: 5rem 0 0.5rem !important;
 }
 .woocommerce-checkout section:first-of-type h1,
 .woocommerce-cart section:first-of-type h1 {
-    font-size: clamp(1.8rem, 3vw, 2.4rem) !important;
+    font-size: clamp(1.4rem, 2.5vw, 1.8rem) !important;
 }

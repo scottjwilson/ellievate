@@ -356,3 +356,22 @@ remove_action(
     "woocommerce_simple_add_to_cart",
     30,
 );
+
+/**
+ * WooCommerce: Rename checkout page title
+ */
+add_filter(
+    "the_title",
+    function (string $title, int $id): string {
+        if (
+            !is_admin() &&
+            function_exists("wc_get_page_id") &&
+            $id === wc_get_page_id("checkout")
+        ) {
+            return "Complete Your Booking";
+        }
+        return $title;
+    },
+    10,
+    2,
+);

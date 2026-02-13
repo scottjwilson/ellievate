@@ -8,6 +8,7 @@
 
 <body <?php body_class(); ?>>
 <?php wp_body_open(); ?>
+<a href="#main" class="sr-only">Skip to content</a>
 
 <header class="header" id="header">
     <div class="container">
@@ -36,4 +37,4 @@
     </div>
 </header>
 
-<main>
+<main id="main">

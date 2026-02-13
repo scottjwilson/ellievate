@@ -7,7 +7,7 @@
 
 defined("ABSPATH") || exit();
 
-define("ELLIEVATED_VERSION", "1.1.0");
+define("ELLIEVATED_VERSION", "1.2.0");
 define("ELLIEVATED_DIR", get_template_directory());
 define("ELLIEVATED_URI", get_template_directory_uri());
 
@@ -65,13 +65,7 @@ function ellievated_enqueue_assets(): void
         ELLIEVATED_VERSION,
     );
 
-    // Google Fonts
-    wp_enqueue_style(
-        "ellievated-fonts",
-        "https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap",
-        [],
-        null,
-    );
+    // Google Fonts loaded via preload in ellievated_preconnect_fonts() to avoid render blocking
 
     // Check if Vite handles assets
     if (function_exists("ellievated_detect_vite_server")) {
@@ -118,6 +112,24 @@ function ellievated_enqueue_assets(): void
         );
     }
 
+    if (is_page_template("contact.php")) {
+        wp_enqueue_style(
+            "ellievated-contact",
+            get_template_directory_uri() . "/css/contact.css",
+            ["ellievated-base"],
+            ELLIEVATED_VERSION,
+        );
+    }
+
+    if (is_page_template("services.php")) {
+        wp_enqueue_style(
+            "ellievated-services",
+            get_template_directory_uri() . "/css/services.css",
+            ["ellievated-base"],
+            ELLIEVATED_VERSION,
+        );
+    }
+
     // Enqueue main JavaScript
     wp_enqueue_script(
         "ellievated-main",
@@ -128,6 +140,32 @@ function ellievated_enqueue_assets(): void
     );
 }
 add_action("wp_enqueue_scripts", "ellievated_enqueue_assets");
+
+/**
+ * Dequeue unused styles on the front end for performance
+ */
+function ellievated_dequeue_unused_assets(): void
+{
+    // Block library CSS is 99% unused on this theme
+    wp_dequeue_style("wp-block-library");
+    wp_dequeue_style("wp-block-library-theme");
+    wp_dequeue_style("global-styles");
+
+    // Dequeue WooCommerce assets on pages that don't need them
+    if (
+        is_front_page() ||
+        is_page_template("contact.php") ||
+        is_page_template("services.php")
+    ) {
+        wp_dequeue_style("woocommerce-layout");
+        wp_dequeue_style("woocommerce-smallscreen");
+        wp_dequeue_style("woocommerce-general");
+        wp_dequeue_script("wc-cart-fragments");
+        wp_dequeue_script("woocommerce");
+        wp_dequeue_script("wc-add-to-cart");
+    }
+}
+add_action("wp_enqueue_scripts", "ellievated_dequeue_unused_assets", 100);
 
 /**
  * Custom excerpt length
@@ -279,6 +317,105 @@ function ellievated_icon($name, $size = 20): string
 }
 
 /**
+ * Output JSON-LD structured data
+ */
+function ellievated_structured_data(): void
+{
+    if (is_front_page()) {
+        $schema = [
+            "@context" => "https://schema.org",
+            "@type" => "BeautySalon",
+            "name" => "Ellievated Beauty",
+            "description" =>
+                "Expert facials, precision brow shaping, and silky-smooth waxing in Bakersfield, CA.",
+            "url" => home_url("/"),
+            "telephone" => "+16614588040",
+            "email" => "hello@ellievatedbeauty.com",
+            "address" => [
+                "@type" => "PostalAddress",
+                "addressLocality" => "Bakersfield",
+                "addressRegion" => "CA",
+                "addressCountry" => "US",
+            ],
+            "openingHoursSpecification" => [
+                "@type" => "OpeningHoursSpecification",
+                "dayOfWeek" => [
+                    "Monday",
+                    "Tuesday",
+                    "Wednesday",
+                    "Thursday",
+                    "Friday",
+                    "Saturday",
+                ],
+                "opens" => "09:00",
+                "closes" => "17:00",
+            ],
+            "priceRange" => "$25-$85",
+            "aggregateRating" => [
+                "@type" => "AggregateRating",
+                "ratingValue" => "5.0",
+                "reviewCount" => "500",
+            ],
+        ];
+
+        echo '<script type="application/ld+json">' .
+            wp_json_encode(
+                $schema,
+                JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT,
+            ) .
+            "</script>" .
+            "\n";
+    }
+}
+add_action("wp_head", "ellievated_structured_data", 5);
+
+/**
+ * Output meta description and Open Graph tags
+ */
+function ellievated_meta_tags(): void
+{
+    $site_name = "Ellievated Beauty";
+    $default_desc =
+        "Expert facials, precision brow shaping, and silky-smooth waxing in Bakersfield, CA. Book your appointment today.";
+    $default_image = get_template_directory_uri() . "/images/d.jpg";
+
+    if (is_front_page()) {
+        $title = "Ellievated Beauty — Licensed Esthetician in Bakersfield, CA";
+        $description = $default_desc;
+    } elseif (is_page()) {
+        $title = get_the_title() . " — " . $site_name;
+        $description = has_excerpt() ? get_the_excerpt() : $default_desc;
+    } else {
+        $title = wp_title("—", false, "right") . $site_name;
+        $description = $default_desc;
+    }
+
+    $url = is_front_page() ? home_url("/") : get_permalink();
+
+    echo '<meta name="description" content="' .
+        esc_attr($description) .
+        '">' .
+        "\n";
+    echo '<meta property="og:type" content="website">' . "\n";
+    echo '<meta property="og:title" content="' . esc_attr($title) . '">' . "\n";
+    echo '<meta property="og:description" content="' .
+        esc_attr($description) .
+        '">' .
+        "\n";
+    echo '<meta property="og:url" content="' . esc_url($url) . '">' . "\n";
+    echo '<meta property="og:image" content="' .
+        esc_url($default_image) .
+        '">' .
+        "\n";
+    echo '<meta property="og:site_name" content="' .
+        esc_attr($site_name) .
+        '">' .
+        "\n";
+    echo '<meta name="twitter:card" content="summary_large_image">' . "\n";
+}
+add_action("wp_head", "ellievated_meta_tags", 2);
+
+/**
  * Body Classes
  */
 function ellievated_body_classes($classes): array
@@ -291,12 +428,21 @@ function ellievated_body_classes($classes): array
 add_filter("body_class", "ellievated_body_classes");
 
 /**
- * Add preconnect for Google Fonts
+ * Add preconnect for Google Fonts and preload the font stylesheet
  */
 function ellievated_preconnect_fonts(): void
 {
+    $fonts_url =
+        "https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap";
     echo '<link rel="preconnect" href="https://fonts.googleapis.com">';
     echo '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>';
+    echo '<link rel="preload" as="style" href="' . esc_url($fonts_url) . '">';
+    echo '<link rel="stylesheet" href="' .
+        esc_url($fonts_url) .
+        '" media="print" onload="this.media=\'all\'">';
+    echo '<noscript><link rel="stylesheet" href="' .
+        esc_url($fonts_url) .
+        '"></noscript>';
 }
 add_action("wp_head", "ellievated_preconnect_fonts", 1);
 

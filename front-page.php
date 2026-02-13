@@ -26,7 +26,7 @@ get_header(); ?>
             <div class="hero-image-frame">
                 <img src="<?php echo esc_url(
                     get_template_directory_uri() . "/images/d.jpg",
-                ); ?>" alt="Ellievated Beauty — Esthetician at work">
+                ); ?>" alt="Ellievated Beauty — Esthetician at work" width="799" height="1200" fetchpriority="high">
             </div>
             <div class="hero-badge">
                 <div class="hero-badge-icon">&#10022;</div>
@@ -67,7 +67,7 @@ get_header(); ?>
                 <?php if ($icon): ?>
                     <div class="service-icon"><?php echo $icon; ?></div>
                 <?php endif; ?>
-                <h3 class="service-name"><?php the_title(); ?></h3>
+                <h2 class="service-name"><?php the_title(); ?></h2>
                 <?php if ($duration): ?>
                     <p class="service-duration"><?php echo esc_html(
                         $duration,
@@ -97,7 +97,7 @@ get_header(); ?>
             <div class="about-image">
                 <img src="<?php echo esc_url(
                     get_template_directory_uri() . "/images/headshot.jpeg",
-                ); ?>" alt="Ellie — Licensed Esthetician">
+                ); ?>" alt="Ellie — Licensed Esthetician" loading="lazy" width="800" height="1200">
             </div>
             <div class="about-stat-float">
                 <div class="about-stat-number">8+</div>
@@ -179,7 +179,7 @@ get_header(); ?>
             <a href="<?php echo esc_url(
                 home_url("/contact"),
             ); ?>" class="btn btn-light">Book Online</a>
-            <a href="tel:+15551234567" class="btn btn-outline-light">Call (555) 123-4567</a>
+            <a href="tel:+16614588040" class="btn btn-outline-light">Call (661) 458-8040</a>
         </div>
     </div>
 </section>

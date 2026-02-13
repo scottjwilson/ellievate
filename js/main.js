@@ -471,9 +471,15 @@
     question?.addEventListener("click", () => {
       const isOpen = item.classList.contains("is-open");
       document.querySelectorAll(".faq-item").forEach((other) => {
-        if (other !== item) other.classList.remove("is-open");
+        if (other !== item) {
+          other.classList.remove("is-open");
+          other
+            .querySelector(".faq-question")
+            ?.setAttribute("aria-expanded", "false");
+        }
       });
       item.classList.toggle("is-open", !isOpen);
+      question.setAttribute("aria-expanded", String(!isOpen));
     });
   });
 })();
